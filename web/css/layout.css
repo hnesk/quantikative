@@ -30,18 +30,28 @@ body {
 #wahlomat ul.party {
     float: left;
     width:200px;
-}
-
-#wahlomat ul li {
     margin:0px;
 }
-
-#wahlomat ul li label {
-    margin:0px;
-}
-
 
 #wahlomat ul.term {
     float: right;
     width:300px;
+    margin:0px;
+}
+
+#wahlomat ul li {
+    margin:0px;
+    list-style-type: none;
+    line-height:15px;
+    font-size: 12px;
+}
+
+#wahlomat ul li label {
+    margin:0px;
+    padding: 0px;
+}
+
+#wahlomat ul li label input {
+    margin:1px 3px 0 0;
+    float: left;
 }

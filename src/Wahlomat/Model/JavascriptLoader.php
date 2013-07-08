@@ -17,69 +17,61 @@ use TermDocumentTools\TermDocumentMatrix;
 use TermDocumentTools\Terms;
 
 class JavascriptLoader {
+
+    protected static $SPECIAL_CHARS = array(
+        "[BSLZ]" => '',
+        "~@-@~" => "'",
+        "- " => ""
+
+    );
+
+    protected static $SHORTEN_PARTY= array(
+        'DIE' => '',
+        'TIERSCHUTZPARTEI' => 'MUT',
+        '/FREIE WÄHLER' => '',
+        'NRW' => '',
+        'FREIE WÄHLER' => 'FREI',
+        'PARTEI DER VERNUNFT' => 'PDV'
+    );
+
+
     /**
      * @param string $file
+     * @param int $langId (0=german / 1=english)
      * @return TermDocumentMatrix
      */
-    public static function load($file) {
+    public static function load($file, $langId = 0) {
 
-        $theses = array();
-        $parties = array();
-        $matrix = array();
-
-        $fixString = function ($s) { return trim(str_replace('[BSLZ]','',utf8_encode($s)));};
-
-        $lines = explode("\n", file_get_contents($file));
-
-        foreach ($lines as $line) {
-            $line = trim($line);
-            if (preg_match("#^WOMT_aThesen\[(\d+)\]\[0\]\[0\]='([^']+)';#",$line, $matches)) {
-                $theses[intval($matches[1])]['short'] = $fixString($matches[2]);
-                $theses[intval($matches[1])]['index'] = intval($matches[1]);
-            }
-            if (preg_match("#^WOMT_aThesen\[(\d+)\]\[0\]\[1\]='([^']+)';#",$line, $matches)) {
-                $theses[intval($matches[1])]['long'] = $fixString($matches[2]);
-            }
-
-            if (preg_match("#^WOMT_aParteien\[(\d+)\]\[0\]\[1\]='([^']+)';#",$line, $matches)) {
-                $parties[intval($matches[1])]['short'] = $fixString($matches[2]);
-                $parties[intval($matches[1])]['index'] = intval($matches[1]);
-            }
-
-            if (preg_match("#^WOMT_aParteien\[(\d+)\]\[0\]\[0\]='([^']+)';#",$line, $matches)) {
-                $parties[intval($matches[1])]['long'] = $fixString($matches[2]);
-            }
-
-            if (preg_match("#^WOMT_aThesenParteien\[(\d+)\]\[(\d+)\]='([+-]?[01])';#",$line, $matches)) {
-                $matrix[intval($matches[2])][intval($matches[1])] = intval($matches[3]);
-            }
-        }
-
-        $replacements = array(
-            'DIE' => '',
-            'TIERSCHUTZPARTEI' => 'MUT',
-            '/FREIE WÄHLER' => '',
-            'NRW' => '',
-            'FREIE WÄHLER' => 'FREI',
-            'PARTEI DER VERNUNFT' => 'PDV'
-        );
-
-        foreach ($parties as $k=>$p) {
-            $parties[$k]['shortest'] = trim(str_replace(array_keys($replacements), array_values($replacements), mb_strtoupper($parties[$k]['short'],'utf8')));
-        }
+        $data = json_decode(file_get_contents($file));
 
         $terms = new Terms();
-        foreach ($theses as $i => $thesis) {
-            $terms->append(new Term($i, $thesis['short'], $thesis['long']));
+
+        foreach ($data->theses as $i=>$thesis) {
+            $terms->append(new Term($i, self::fixString($thesis[$langId][0]), self::fixString($thesis[$langId][1])));
         }
 
         $documents = new Documents();
-        foreach ($parties as $i => $party) {
-            $documents->append(new Document($i, $party['shortest'], $party['long']));
+        foreach ($data->parties as $i => $party) {
+            $documents->append(new Document($i, self::shortenParty($party[$langId][1]), self::fixString($party[$langId][0])));
         }
 
-
-        return new TermDocumentMatrix($terms, $documents, new Matrix($matrix));
+        return new TermDocumentMatrix($terms, $documents, Matrix::create($data->matrix)->transpose());
     }
 
+    /**
+     * @param string $s
+     * @return string
+     */
+    public static function fixString($s) {
+        return trim(str_replace(array_keys(self::$SPECIAL_CHARS), array_values(self::$SPECIAL_CHARS), $s));
+    }
+
+
+    /**
+     * @param string $party
+     * @return string
+     */
+    public static function shortenParty($party) {
+        return trim(str_replace(array_keys(self::$SHORTEN_PARTY), array_values(self::$SHORTEN_PARTY), mb_strtoupper($party,'utf8')));
+    }
 }

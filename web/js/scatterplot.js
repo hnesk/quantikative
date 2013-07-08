@@ -18,11 +18,11 @@ function scatterPlot() {
     function chart(selection) {
         selection.each(function(data) {
 
-            var min = Math.min(d3.min(data, returnIndex('x')), d3.min(data, returnIndex('y')));
-            var max = Math.max(d3.max(data, returnIndex('x')), d3.max(data, returnIndex('y')));
+            var min = (-0.5 + Math.min(d3.min(data, returnIndex('x')), d3.min(data, returnIndex('y')))) * 0.5;
+            var max = (0.5 + Math.max(d3.max(data, returnIndex('x')), d3.max(data, returnIndex('y')))) * 0.5;
 
-            var min = -0.5;
-            var max = 0.5;
+            //var min = -0.5;
+            //var max = 0.5;
             var scale = d3.scale.linear().range([70,530]).domain([min,max]);
 
             // Select the svg element, if it exists.

@@ -54,39 +54,33 @@
         d3.select("#scatter").datum(data.plot).call(chart);
 
         var partyItems = d3.select("#wahlomat ul.party").selectAll('li').data(data.parties);
-        var partyItemsEnter = partyItems.enter().append('li');
-        partyItemsEnter
-                .append('input')
-                .attr('type', 'checkbox')
-                .attr('id',function(d) {return d['short'];})
-                .attr('name',function(d,i) {return 'partyName['+i+']';})
-                .attr('value', '1')
-                .on('change', update)
-                .checked(1);
-
-        partyItemsEnter
-                .append('label')
-                .attr('for',function(d) {return d['short'];})
-                .text(function(d) {return d['short'];});
+        partyItems.enter()
+                .append('li')
+                    .append('label')
+                        .text(function(d) {return d.short;})
+                        .attr('title', function(d) {return d.long;})
+                        .append('input')
+                            .attr('type', 'checkbox')
+                            .attr('name',function(d,i) {return 'partyName['+ d.index+']';})
+                            .attr('value', '1')
+                            .on('change', update)
+                            .checked(1);
 
         partyItems.exit()
                 .checked(0);
 
-
         var termItems = d3.select("#wahlomat ul.term").selectAll('li').data(data.terms);
-        var termItemsEnter = termItems.enter().append('li');
-        termItemsEnter
-                .append('input')
-                .attr('type', 'checkbox')
-                .attr('id',function(d) {return d['short'];})
-                .attr('name',function(d,i) {return 'termName['+i+']';})
-                .attr('value', '1')
-                .on('change', update)
-                .checked(1);
-        termItemsEnter
-                .append('label')
-                .attr('for',function(d) {return d['short'];})
-                .text(function(d) {return d['short'];});
+        termItems.enter()
+                .append('li')
+                    .append('label')
+                        .text(function(d) {return d.short;})
+                        .attr('title', function(d) {return d.long;})
+                        .append('input')
+                            .attr('type', 'checkbox')
+                            .attr('name',function(d,i) {return 'termName['+ d.index+']';})
+                            .attr('value', '1')
+                            .on('change', update)
+                            .checked(1);
 
         termItems.exit()
                 .checked(0);
