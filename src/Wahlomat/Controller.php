@@ -80,13 +80,10 @@ class Controller {
      * @throws \InvalidArgumentException
      * @return \TermDocumentTools\TermDocumentMatrix
      */
-    public function getMatrix($source = 'btw2009') {
-        $filename = BASE_DIR.'/data/'.$source.'/data.js';
-        if (!file_exists($filename)) {
-            throw new \InvalidArgumentException(sprintf("File '%s' not found.",$filename));
-        }
+    public function getMatrix($source = 'schleswigholstein2012') {
         return JavascriptLoader::load(BASE_DIR.'/data/'.$source.'/data.js');
     }
+
 
 
 }

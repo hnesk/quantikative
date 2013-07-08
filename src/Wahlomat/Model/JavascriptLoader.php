@@ -20,6 +20,7 @@ class JavascriptLoader {
 
     protected static $SPECIAL_CHARS = array(
         "[BSLZ]" => '',
+        "[LZ]" => '',
         "~@-@~" => "'",
         "- " => ""
 
@@ -41,6 +42,10 @@ class JavascriptLoader {
      * @return TermDocumentMatrix
      */
     public static function load($file, $langId = 0) {
+        if (!file_exists($file)) {
+            throw new \InvalidArgumentException(sprintf("File '%s' not found.",$file));
+        }
+
 
         $data = json_decode(file_get_contents($file));
 
