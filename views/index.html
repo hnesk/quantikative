@@ -1,0 +1,98 @@
+{% extends layout %}
+{% block title %}Index{% endblock %}
+{% block content %}
+<div id="wahlomat">
+    <ul class="party"></ul>
+    <ul class="term"></ul>
+    <div id="scatter" class="chart"></div>
+</div>
+
+
+<script src="js/vendor/d3.v2.js"></script>
+<script src="js/scatterplot.js"></script>
+<script type="text/javascript">
+
+    d3.selection.prototype.checked = function(value) {
+        return arguments.length < 1 ? this.property("checked") : this.property("checked", value);
+    };
+
+    var chart = scatterPlot();
+
+    function buildUrl(base, arguments) {
+        var url = base;
+        var argumentStrings = [];
+        for (var i in arguments) {
+            argumentStrings.push(i + '=' + arguments[i]);
+        }
+        return url + (argumentStrings.length > 0 ? '?' +  argumentStrings.join('&') : '');
+    };
+
+
+
+    function update() {
+        console.log('update');
+        filter = [];
+
+        d3.selectAll("#wahlomat ul.party li input:checked").each(function (d,i) {
+            filter['partyName['+d.index+']'] = 1;
+        });
+
+        d3.selectAll("#wahlomat ul.term li input:checked").each(function (d,i) {
+            filter['termName['+d.index+']'] = 1;
+        });
+
+        var url = buildUrl('api', filter);
+
+        d3.json(url,function(data) {
+            d3.select("#scatter").datum(data.plot).call(chart);
+        });
+    }
+
+
+
+    d3.json('api',function(data) {
+        d3.select("#scatter").datum(data.plot).call(chart);
+
+        var partyItems = d3.select("#wahlomat ul.party").selectAll('li').data(data.parties);
+        var partyItemsEnter = partyItems.enter().append('li');
+        partyItemsEnter
+                .append('input')
+                .attr('type', 'checkbox')
+                .attr('id',function(d) {return d['short'];})
+                .attr('name',function(d,i) {return 'partyName['+i+']';})
+                .attr('value', '1')
+                .on('change', update)
+                .checked(1);
+
+        partyItemsEnter
+                .append('label')
+                .attr('for',function(d) {return d['short'];})
+                .text(function(d) {return d['short'];});
+
+        partyItems.exit()
+                .checked(0);
+
+
+        var termItems = d3.select("#wahlomat ul.term").selectAll('li').data(data.terms);
+        var termItemsEnter = termItems.enter().append('li');
+        termItemsEnter
+                .append('input')
+                .attr('type', 'checkbox')
+                .attr('id',function(d) {return d['short'];})
+                .attr('name',function(d,i) {return 'termName['+i+']';})
+                .attr('value', '1')
+                .on('change', update)
+                .checked(1);
+        termItemsEnter
+                .append('label')
+                .attr('for',function(d) {return d['short'];})
+                .text(function(d) {return d['short'];});
+
+        termItems.exit()
+                .checked(0);
+
+    });
+
+
+</script>
+{% endblock %}

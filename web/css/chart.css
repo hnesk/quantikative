@@ -1,0 +1,62 @@
+.chart svg {
+	background: #fff;
+	border: solid 1px #ddd;
+	box-shadow: 0 0 4px rgba(0,0,0,.2);
+	font: 10px sans-serif;
+	height: 600px;
+	width: 600px;
+}
+
+.chart circle.little {
+	fill: #aaa;
+	stroke: #666;
+	stroke-width: 1.5px;
+}
+
+.chart g.term circle {
+	fill: #aaa;
+	stroke: #666;
+	stroke-width: 1px;
+}
+
+.chart g.term text {
+	display:none;
+}
+
+.chart g.term:hover text {
+	display:block;
+}
+
+.chart g.party circle {
+	fill: #a00;
+	stroke: #666;
+	stroke-width: 1px;
+}
+
+.chart g.party text {
+	display:block;
+}
+
+.chart g.party:hover text {
+	display:block;
+}
+
+.chart circle.nonrelevant {
+	fill: #eee;
+	stroke: #ddd;
+	stroke-width: 1px;
+
+}
+
+
+.chart button {
+	left: 105px;
+	position: absolute;
+	top: 145px;
+	width: 80px;
+}
+
+.chart .data rect {
+	fill: #eee;
+	stroke: #ccc;
+}

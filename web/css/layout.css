@@ -1,0 +1,47 @@
+html {
+    font-family: sans-serif;
+}
+
+code,
+kbd,
+pre,
+samp {
+    font-family: 'Ubuntu Mono',monospace, serif;
+}
+
+body {
+    font-family: "Ubuntu", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+code,
+pre {
+    font-family: 'Ubuntu Mono',Monaco, Menlo, Consolas, "Courier New", monospace;
+}
+
+body {
+    padding-top: 50px;
+}
+
+.content {
+    padding:10px;
+    background-color: #efeff8;
+}
+
+#wahlomat ul.party {
+    float: left;
+    width:200px;
+}
+
+#wahlomat ul li {
+    margin:0px;
+}
+
+#wahlomat ul li label {
+    margin:0px;
+}
+
+
+#wahlomat ul.term {
+    float: right;
+    width:300px;
+}
