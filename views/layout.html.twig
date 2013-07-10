@@ -8,13 +8,13 @@
 
     <title>{{ block('title') }}</title>
 
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <link href="css/chart.css" rel="stylesheet">
-    <link href="css/layout.css" rel="stylesheet">
+    <link href="{{ app.request.baseUrl }}/css/bootstrap.css" rel="stylesheet">
+    <link href="{{ app.request.baseUrl }}/css/chart.css" rel="stylesheet">
+    <link href="{{ app.request.baseUrl }}/css/layout.css" rel="stylesheet">
 
     <!--[if lt IE 9]>
-    <script src="js/vendor/html5shiv.js"></script>
-    <script src="js/vendor/respond.min.js"></script>
+    <script src="{{ app.request.baseUrl }}/js/vendor/html5shiv.js"></script>
+    <script src="{{ app.request.baseUrl }}/js/vendor/respond.min.js"></script>
     <![endif]-->
 
 </head>
@@ -53,8 +53,8 @@
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="js/vendor/jquery.js"></script>
-<script src="js/vendor/bootstrap.js"></script>
+<script src="{{ app.request.baseUrl }}/js/vendor/jquery.js"></script>
+<script src="{{ app.request.baseUrl }}/js/vendor/bootstrap.js"></script>
 
 </body>
 </html>
