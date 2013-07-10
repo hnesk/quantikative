@@ -1,8 +1,9 @@
 {
     "require": {
-        "silex/silex": "1.0.x-dev",
+        "silex/silex": "1.1.*",
         "monolog/monolog": "1.5.0",
-        "twig/twig": ">=1.8,<2.0-dev"
+        "twig/twig": "1.13.*",
+        "symfony/twig-bridge": "2.3.*"
     },
     "require-dev": {
         "phing/phing": "2.5.0"

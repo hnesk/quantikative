@@ -16,26 +16,42 @@ use TermDocumentTools\Term;
 use Wahlomat\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Wahlomat\Model\JavascriptLoader;
+use Wahlomat\Model\LoaderInterface;
 
 class Controller {
 
+    /**
+     * @var LoaderInterface
+     */
+    protected $loader;
 
-    public function index(Request $request, Application $app) {
-        $tdm = $this->getMatrix();
-        $tdm = $tdm->filterDocuments(new ArrayKeyFilter($request->get('partyName')));
-        $tdm = $tdm->filterTerms(new ArrayKeyFilter($request->get('termName')));
-        return $app->render('index.html');
-        return
-            '<pre>'.$tdm->getValues()->transpose()->toString('%6d').'</pre>'.
-            '<pre>'.$tdm->getDocuments().'</pre>'.
-            '<pre>'.$tdm->getTerms().'</pre>'
-        ;
+    /**
+     * @param LoaderInterface $loader
+     */
+    public function __construct(LoaderInterface $loader = null) {
+        $this->loader = $loader ?: new JavascriptLoader(BASE_DIR.'/data/');
     }
 
-    public function json(Request $request, Application $app) {
-        $tdm = $this->getMatrix();
-        $tdm = $tdm->filterDocuments(new ArrayKeyFilter($request->get('partyName')));
-        $tdm = $tdm->filterTerms(new ArrayKeyFilter($request->get('termName')));
+
+    public function index($dataSet, Request $request, Application $app) {
+        $dataSets = $this->loader->getDataSets();
+        $tdm = $this->getMatrix($dataSet);
+        $tdm = $tdm->filterDocuments(new ArrayKeyFilter($request->get('party')));
+        $tdm = $tdm->filterTerms(new ArrayKeyFilter($request->get('term')));
+        return $app->render(
+            'index.html.twig',
+            array(
+                'tdm' => $tdm,
+                'dataSets' => $dataSets,
+                'dataSet' => $dataSet,
+            )
+        );
+    }
+
+    public function json($dataSet, Request $request, Application $app) {
+        $tdm = $this->getMatrix($dataSet);
+        $tdm = $tdm->filterDocuments(new ArrayKeyFilter($request->get('party')));
+        $tdm = $tdm->filterTerms(new ArrayKeyFilter($request->get('term')));
 
         $features = $tdm->calculateFactorMatrix();
 
@@ -49,8 +65,8 @@ class Controller {
             $data[] = (object)array(
                 'type' => 'party',
                 'index' => 'party'.$party->id(),
-                'x' => $features[$xFeature]->party[$i],
-                'y' => $features[$yFeature]->party[$i],
+                'x' => $features[$xFeature]->weight * $features[$xFeature]->party[$i],
+                'y' => $features[$xFeature]->weight * $features[$yFeature]->party[$i],
                 'short' => $party->name(),
                 'long' => $party->description(),
             );
@@ -62,8 +78,8 @@ class Controller {
             $data[] = (object)array(
                 'type' => 'term',
                 'index' => 'term'.$term->id(),
-                'x' => $features[$xFeature]->thesis[$i],
-                'y' => $features[$yFeature]->thesis[$i],
+                'x' => $features[$xFeature]->weight * $features[$xFeature]->thesis[$i],
+                'y' => $features[$xFeature]->weight * $features[$yFeature]->thesis[$i],
                 'short' => $term->name(),
                 'long' => $term->description()
             );
@@ -81,7 +97,7 @@ class Controller {
      * @return \TermDocumentTools\TermDocumentMatrix
      */
     public function getMatrix($source = 'schleswigholstein2012') {
-        return JavascriptLoader::load(BASE_DIR.'/data/'.$source.'/data.js');
+        return $this->loader->load($source);
     }
 
 
