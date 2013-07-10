@@ -15,10 +15,7 @@ function multiSelect() {
         itemTitle = returner('long'),
         selection = [],
         itemName = function(d) {return chartName+'['+ itemIndex(d)+']';};
-
-
     ;
-
 
     function chart(currentSelection) {
         selection = currentSelection[0][0];
