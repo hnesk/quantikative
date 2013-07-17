@@ -13,12 +13,12 @@ use Silex\Application\TwigTrait;
 use TermDocumentTools\ArrayKeyFilter;
 use TermDocumentTools\Document;
 use TermDocumentTools\Feature;
+use TermDocumentTools\LoaderInterface;
 use TermDocumentTools\Term;
 use TermDocumentTools\TermDocumentMatrix;
 use Wahlomat\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Wahlomat\Model\JavascriptLoader;
-use Wahlomat\Model\LoaderInterface;
 
 class Controller {
 

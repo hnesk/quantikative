@@ -22,6 +22,9 @@ class SVD {
 	 */
 	public static function decompose($u, $m, $n, $eps = 0.0001, $maxIterations = 75) {
 		$rv1 = array();
+        $w = array();
+        $v = array();
+        $l = $nm = 0;
 		$g = $scale = $anorm = 0.0;
 		// Householder reduction to bidiagonal form.
 		for ($i = 0; $i < $n; $i++) {
@@ -92,7 +95,7 @@ class SVD {
 			// Accumulation of right-hand transformations.
 			if ($i < $n - 1) {
 				if ($g != 0.0) {
-					for ($j = $l; $j < $n; $j++) {
+                    for ($j = $l; $j < $n; $j++) {
 						// Double division to avoid possible underflow.
 						$v[$j][$i] = $u[$i][$l] == 0 ? 0 : ($u[$i][$j] / $u[$i][$l]) / $g;
 					}
@@ -184,7 +187,7 @@ class SVD {
 				if ($l === $k) {
 					// Convergence.
 					if ($z < 0.0) {
-						// Singular value is made nonnegative.
+						// Singular value is made non-negative.
 						$w[$k] = -$z;
 						for ($j = 0; $j < $n; $j++) {
 							$v[$j][$k] = -$v[$j][$k];
@@ -345,9 +348,9 @@ class SVD {
 	 * @return float
 	 */
 	protected static function pythagoras($a, $b) {
-		$absa = abs($a);
-		$absb = abs($b);
-		return ($absa > $absb ? $absa * sqrt(1.0 + ($absb/$absa) * ($absb/$absa) ) : ($absb === 0.0 ? 0.0 : $absb * sqrt(1.0 + ($absa/$absb) * ($absa/$absb))));
+		$absA = abs($a);
+		$absB = abs($b);
+		return ($absA > $absB ? $absA * sqrt(1.0 + ($absB/$absA) * ($absB/$absA) ) : ($absB === 0.0 ? 0.0 : $absB * sqrt(1.0 + ($absA/$absB) * ($absA/$absB))));
 
 	}
 

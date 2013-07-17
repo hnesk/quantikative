@@ -58,6 +58,7 @@ class Application extends BaseApplication {
         $app = &$this;
         $this->before(
             function () use ($app) {
+                /** @noinspection PhpUndefinedMethodInspection */
                 $app['twig']->addGlobal('layout', $app['twig']->loadTemplate('layout.html.twig'));
             }
         );

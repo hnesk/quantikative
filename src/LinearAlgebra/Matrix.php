@@ -111,7 +111,7 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
 	 */
 	public function row($i) {
 		if ($i >= $this->m) {
-			throw new \InvalidArgumentException('Row '.$i.' doesnt exist');
+			throw new \InvalidArgumentException('Row '.$i.' does not exist');
 		}
 		return new Vector($this->values[$i]);
 	}
@@ -125,7 +125,7 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
 	 */
 	public function column($j) {
 		if ($j >= $this->n) {
-			throw new \InvalidArgumentException('Column '.$j.' doesnt exist');
+			throw new \InvalidArgumentException('Column '.$j.' does not exist');
 		}
 
 		$v = array();
@@ -145,10 +145,10 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
      */
     public function index($i,$j) {
         if ($i >= $this->m) {
-            throw new \InvalidArgumentException('Row '.$i.' doesnt exist');
+            throw new \InvalidArgumentException('Row '.$i.' does not exist');
         }
         if ($j >= $this->n) {
-            throw new \InvalidArgumentException('Column '.$j.' doesnt exist');
+            throw new \InvalidArgumentException('Column '.$j.' does not exist');
         }
         return $this->values[$i][$j];
     }

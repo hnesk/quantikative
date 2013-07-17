@@ -99,7 +99,7 @@ class Feature implements \JsonSerializable {
         $value = 0;
         if ($entry instanceof Term) {
             $value = $this->termValues[$entry->id()];
-        } else if ($entry instanceof Document) {
+        } if ($entry instanceof Document) {
             $value = $this->documentValues[$entry->id()];
         } else {
             throw new \InvalidArgumentException("entry needs to be of type Term or Document");

@@ -2,7 +2,6 @@
 
 namespace TermDocumentTools;
 
-use ___PHPSTORM_HELPERS\object;
 use LinearAlgebra\Matrix;
 use LinearAlgebra\Vector;
 
@@ -112,8 +111,8 @@ class TermDocumentMatrix implements \JsonSerializable {
      */
 	public function toCSV($format = '%10.4F') {
 		$csv = '';
+        /** @var $row Vector */
 		foreach ($this->values as $row) {
-            /** @var $row Vector */
 			$csv .= implode(',',  array_map(function ($value) use ($format) {return sprintf($format, $value);}, $row->values())).PHP_EOL;
 		}
 		return $csv;
