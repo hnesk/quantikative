@@ -22,7 +22,7 @@ class Vector implements \ArrayAccess, \Countable, \Iterator {
 	protected $i;
 
 
-	public function __construct(&$values = array()) {
+	public function __construct($values = array()) {
 		$this->m = count($values);
 		$this->i = 0;
 		$this->values = &$values;
@@ -33,7 +33,7 @@ class Vector implements \ArrayAccess, \Countable, \Iterator {
 	 * @param int $size
 	 * @return Vector
 	 */
-	public function zeros($size) {
+	public static function zeros($size) {
 		return self::fill(0, $size);
 	}
 
@@ -42,7 +42,7 @@ class Vector implements \ArrayAccess, \Countable, \Iterator {
 	 * @param int $size
 	 * @return Vector
 	 */
-	public function ones($size) {
+	public static function ones($size) {
 		return self::fill(1, $size);
 	}
 
@@ -64,11 +64,35 @@ class Vector implements \ArrayAccess, \Countable, \Iterator {
 		return new static(array_fill(0, $size, $value));
 	}
 
-	public function toString($format = '%6.2f', $columnSeparator = " ") {
-		$headerFormat = '%6d';
-		$lineSeparator = PHP_EOL;
-		return implode($columnSeparator, array_map(function ($value) use ($headerFormat) {return sprintf($headerFormat, $value);}, array_keys($this->values))) . $lineSeparator .
-			implode($columnSeparator, array_map(function ($value) use ($format) {return sprintf($format, $value);}, $this->values)).$lineSeparator;
+    /**
+     *
+     * @param array $values
+     * @return Vector
+     */
+    public static function create($values = array()) {
+        if (!is_array($values)) {
+            $values = func_get_args();
+        }
+        return new static($values);
+    }
+
+
+	public function toString($format = '%6.2f', $headerFormat = '%6d', $columnSeparator = " ", $lineSeparator = PHP_EOL) {
+		return implode(
+            $columnSeparator,
+            array_map(
+                function ($value) use ($headerFormat) {return sprintf($headerFormat, $value);},
+                array_keys($this->values)
+            )
+        ) .
+        $lineSeparator .
+		implode(
+            $columnSeparator,
+            array_map(
+                function ($value) use ($format) {return sprintf($format, $value);},
+                $this->values)
+        ) .
+        $lineSeparator;
 	}
 
 	public function __toString() {
