@@ -29,7 +29,7 @@ class TermDocumentMatrix implements \JsonSerializable {
 	 * @param Matrix $values
 	 * @throws \InvalidArgumentException
 	 */
-	public function __construct($terms, $documents, Matrix $values) {
+	public function __construct(Terms $terms, Documents $documents, Matrix $values) {
 		if (count($documents) != count($values)) {
 			throw new \InvalidArgumentException('$values must have # of document entries in the first dimension');
 		}
@@ -46,14 +46,14 @@ class TermDocumentMatrix implements \JsonSerializable {
 	}
 
 	/**
-	 * @return array
+	 * @return Terms
 	 */
 	public function getTerms() {
 		return $this->terms;
 	}
 
 	/**
-	 * @return array
+	 * @return Documents
 	 */
 	public function getDocuments() {
 		return $this->documents;
@@ -120,22 +120,24 @@ class TermDocumentMatrix implements \JsonSerializable {
 	}
 
 
+    /**
+     * @return Features
+     */
     public function calculateFactorMatrix() {
-
         $f = $this->values->svd()->truncate($this->values->m());
 
-        $features = array();
-        for ($featureNumber = 0; $featureNumber <  $f->v()->m(); $featureNumber++) {
-            $features[$featureNumber] = (object)array(
-                'weight' => $f->s()->diagonal($featureNumber),
-                'thesis' => $f->v()->row($featureNumber)->values(),
-                'party' => $f->u()->column($featureNumber)->values()
+        $features = new Features();
+        for ($featureNumber = 0; $featureNumber <  $f->m(); $featureNumber++) {
+            $features[$featureNumber] = new Feature(
+                $featureNumber,
+                new Vector($f->v()->row($featureNumber)->values()),
+                new Vector($f->u()->column($featureNumber)->values()),
+                $f->s()->diagonal($featureNumber),
+                'Feature '.$featureNumber
             );
         }
 
         return $features;
-
-
     }
 
     /**

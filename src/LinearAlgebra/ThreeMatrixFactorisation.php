@@ -39,6 +39,15 @@ class ThreeMatrixFactorisation  {
         $this->v = $v;
     }
 
+    public function n() {
+        return $this->u->n();
+    }
+
+    public function m() {
+        return $this->v->m();
+    }
+
+
     /**
      * @return Matrix
      */

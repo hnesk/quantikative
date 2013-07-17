@@ -12,7 +12,9 @@ namespace Wahlomat;
 use Silex\Application\TwigTrait;
 use TermDocumentTools\ArrayKeyFilter;
 use TermDocumentTools\Document;
+use TermDocumentTools\Feature;
 use TermDocumentTools\Term;
+use TermDocumentTools\TermDocumentMatrix;
 use Wahlomat\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Wahlomat\Model\JavascriptLoader;
@@ -50,13 +52,16 @@ class Controller {
 
     public function json($dataSet, Request $request, Application $app) {
         $tdm = $this->getMatrix($dataSet);
+
         $tdm = $tdm->filterDocuments(new ArrayKeyFilter($request->get('party')));
         $tdm = $tdm->filterTerms(new ArrayKeyFilter($request->get('term')));
 
+        /** @var TermDocumentMatrix $tdm */
         $features = $tdm->calculateFactorMatrix();
-
-        $xFeature = 0;
-        $yFeature = 1;
+        /** @var Feature $xFeature */
+        $xFeature = $features[0];
+        /** @var Feature $yFeature */
+        $yFeature = $features[1];
 
         $data = array();
 
@@ -65,8 +70,8 @@ class Controller {
             $data[] = (object)array(
                 'type' => 'party',
                 'index' => 'party'.$party->id(),
-                'x' => $features[$xFeature]->weight * $features[$xFeature]->party[$i],
-                'y' => $features[$xFeature]->weight * $features[$yFeature]->party[$i],
+                'x' => $xFeature->getDocumentValue($party->id()),
+                'y' => $yFeature->getDocumentValue($party->id()),
                 'short' => $party->name(),
                 'long' => $party->description(),
             );
@@ -78,8 +83,8 @@ class Controller {
             $data[] = (object)array(
                 'type' => 'term',
                 'index' => 'term'.$term->id(),
-                'x' => $features[$xFeature]->weight * $features[$xFeature]->thesis[$i],
-                'y' => $features[$xFeature]->weight * $features[$yFeature]->thesis[$i],
+                'x' => $xFeature->getTermValue($i),
+                'y' => $yFeature->getTermValue($i),
                 'short' => $term->name(),
                 'long' => $term->description()
             );

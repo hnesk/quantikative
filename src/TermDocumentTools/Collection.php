@@ -83,6 +83,10 @@ abstract class Collection implements \IteratorAggregate, \ArrayAccess, \Countabl
     }
 
     public function jsonSerialize() {
+        return $this->toObject();
+    }
+
+    public function toObject() {
         return $this->entries;
     }
 
