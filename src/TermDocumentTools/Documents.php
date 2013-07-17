@@ -13,7 +13,7 @@ namespace TermDocumentTools;
 class Documents extends Collection {
 
     public function append(Document $t) {
-        $this[$t->id()] = $t;
+        $this[] = $t;
     }
 
     protected function checkValue($value)

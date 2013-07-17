@@ -34,7 +34,7 @@ class Term implements \JsonSerializable {
      */
     public function __construct($id, $name, $description ='')
     {
-        $this->id = intval($id);
+        $this->id = trim($id);
         $this->name = trim($name);
         $this->description = trim($description);
     }
