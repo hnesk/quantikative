@@ -11,7 +11,7 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
 	protected $values;
 
 	/**
-	 * Number of rows
+	 * Number of row
 	 * @var int
 	 */
 	protected $m;
@@ -38,12 +38,15 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
 		$this->m = count($values);
 
 		if ($this->m > 0) {
+            if (!is_array(current($values))) {
+                throw new \InvalidArgumentException('2 dimensional array expected');
+            }
 			$this->n = count(current($values));
 		}
 
 		for ($i = 0; $i < $this->m; $i++) {
 			if ($this->n != count($values[$i])) {
-				throw new \InvalidArgumentException('$values must have # of term entries in the second dimension');
+				throw new \InvalidArgumentException('array must have the same number of columns in each row');
 			}
 			for ($j = 0; $j < $this->n; $j++) {
 				$this->values[$i][$j] = $values[$i][$j];
@@ -61,14 +64,42 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
 	 * @return Matrix
 	 */
 	public static function eye($v) {
+        $v = Vector::create($v);
 		$a = array();
 		$dim = count($v);
 		for ($t = 0; $t < $dim; $t++) {
 			$a[$t] = array_fill(0, $dim, 0);
 			$a[$t][$t] = $v[$t];
 		}
-		return new Matrix($a);
+		return static::create($a);
 	}
+
+
+    /**
+     *
+     * @param int $m
+     * @param int $n
+     * @return Matrix
+     */
+    public static function zero($m, $n) {
+        return static::constant($m, $n, 0);
+    }
+
+    /**
+     *
+     * @param int $m
+     * @param int $n
+     * @param float|int $constant
+     * @return Matrix
+     */
+    public static function constant($m, $n, $constant = 0.0) {
+        $a = array();
+        for ($t = 0; $t < $m; $t++) {
+            $a[$t] = array_fill(0, $n, $constant);
+        }
+        return static::create($a);
+    }
+
 
 
 	/**
@@ -77,7 +108,7 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
 	 * @return Matrix
 	 */
 	public static function identity($dim) {
-		return self::eye(array_fill(0, $dim, 1));
+		return static::eye(array_fill(0, $dim, 1));
 	}
 
     /**
@@ -100,20 +131,20 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
 				$transposedValues[$j][$i] = $this->values[$i][$j];
 			}
 		}
-		return new static($transposedValues);
+		return static::create($transposedValues);
 	}
 
 	/**
 	 *
 	 * @param int $i
 	 * @return Vector
-	 * @throws \InvalidArgumentException
+	 * @throws \OutOfBoundsException
 	 */
 	public function row($i) {
-		if ($i >= $this->m) {
-			throw new \InvalidArgumentException('Row '.$i.' does not exist');
+		if ($i >= $this->m || $i<0) {
+			throw new \OutOfBoundsException('Row '.$i.' does not exist');
 		}
-		return new Vector($this->values[$i]);
+		return Vector::create($this->values[$i]);
 	}
 
 
@@ -121,11 +152,11 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
 	 *
 	 * @param int $j
 	 * @return Vector
-	 * @throws \InvalidArgumentException
+	 * @throws \OutOfBoundsException
 	 */
 	public function column($j) {
-		if ($j >= $this->n) {
-			throw new \InvalidArgumentException('Column '.$j.' does not exist');
+		if ($j >= $this->n || $j<0) {
+			throw new \OutOfBoundsException('Column '.$j.' does not exist');
 		}
 
 		$v = array();
@@ -133,22 +164,22 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
 			$v[$i] = $this->values[$i][$j];
 		}
 
-		return new Vector($v);
+		return Vector::create($v);
 	}
 
     /**
      *
      * @param int $i
      * @param int $j
-     * @throws \InvalidArgumentException*
+     * @throws \OutOfBoundsException*
      * @return float
      */
     public function index($i,$j) {
-        if ($i >= $this->m) {
-            throw new \InvalidArgumentException('Row '.$i.' does not exist');
+        if ($i >= $this->m || $i<0) {
+            throw new \OutOfBoundsException('Row '.$i.' does not exist');
         }
-        if ($j >= $this->n) {
-            throw new \InvalidArgumentException('Column '.$j.' does not exist');
+        if ($j >= $this->n || $j<0) {
+            throw new \OutOfBoundsException('Column '.$j.' does not exist');
         }
         return $this->values[$i][$j];
     }
@@ -162,17 +193,16 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
     }
 
 
+    /**
+     *
+     * @param string $format
+     * @param string $headerFormat
+     * @param string $columnSeparator
+     * @param string $lineSeparator
+     * @return string
+     */
+	public function toString($format = '%6.2f', $headerFormat = '%6d', $columnSeparator = " ", $lineSeparator = PHP_EOL) {
 
-	/**
-	 *
-	 * @param string $format
-	 * @param string $columnSeparator
-	 * @param string $lineSeparator
-	 * @return string
-	 */
-	public function toString($format = '%6.2f', $columnSeparator = " ", $lineSeparator = PHP_EOL) {
-
-		$headerFormat = '%6d';
         $firstLine = current($this->values());
 		$csv =
             strtr(sprintf($headerFormat, 0),'0',' ') .
@@ -240,7 +270,7 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
 				$v[$i][$j] = $this->values[$i][$j];
 			}
 		}
-		return new static($v);
+		return static::create($v);
 	}
 
 	public function offsetExists($offset) {
@@ -251,7 +281,7 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
 		if (!$this->offsetExists($offset)) {
 			throw new \InvalidArgumentException();
 		}
-		return new Vector($this->values[$offset]);
+		return Vector::create($this->values[$offset]);
 	}
 
 	public function offsetSet($offset, $value) {
@@ -272,7 +302,7 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
 	}
 
 	public function current() {
-		return new Vector($this->values[$this->i]);
+		return Vector::create($this->values[$this->i]);
 	}
 
 	public function key() {
@@ -341,7 +371,7 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
 		for ($t = 0; $t < $this->short(); $t++) {
 			$v[$t] = $this->values[$t][$t];
 		}
-		return new Vector($v);
+		return Vector::create($v);
 	}
 
 	/**
@@ -366,7 +396,7 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
      * @return Matrix
      */
 	public function add(Matrix $b) {
-		return new static($this->coMap($b, function ($a, $b) {return $a+$b;}));
+		return $this->coMap($b, function ($a, $b) {return $a+$b;});
 	}
 
     /**
@@ -375,7 +405,7 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
      * @return Matrix
      */
 	public function subtract(Matrix $b) {
-		return new static($this->coMap($b, function ($a, $b) {return $a-$b;}));
+		return $this->coMap($b, function ($a, $b) {return $a-$b;});
 	}
 
 	/**
@@ -383,21 +413,31 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
 	 * @return Matrix
 	 */
 	public function negate() {
-		return new static($this->map(function ($a) {return -$a;}));
+		return $this->scalar(-1);
 	}
+
+    /**
+     *
+     * @param float $f
+     * @return Matrix
+     */
+    public function scalar($f) {
+        return $this->map(function ($a) use($f){ return $f*$a;});
+    }
+
 
 	/**
 	 *
 	 * @return Matrix
 	 */
 	public function round() {
-		return new static($this->map(function ($e) {return round($e);}));
+		return $this->map(function ($e) {return round($e);});
 	}
 
 	/**
 	 *
 	 * @param Callable $function
-	 * @return array
+	 * @return Matrix
 	 */
 	public function map($function) {
 		$result = array();
@@ -406,10 +446,31 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
 				$result[$i][$j] = $function($this->values[$i][$j], $i, $j);
 			}
 		}
-		return $result;
+		return static::create($result);
 	}
 
-	public function dim() {
+
+    /**
+     *
+     * @param Callable $function
+     * @param int $result
+     * @return number
+     */
+    public function reduce($function, $result = 0) {
+        for ($i=0; $i < $this->m; $i++) {
+            for ($j=0; $j < $this->n; $j++) {
+                $result = $function($result,$this->values[$i][$j], $i, $j);
+            }
+        }
+        return $result;
+    }
+
+
+    /**
+     *
+     * @return string
+     */
+    public function dim() {
 		return $this->m.'x'.$this->n;
 	}
 
@@ -418,7 +479,7 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
      * @param Matrix $b
      * @param Callable $function
      * @throws \InvalidArgumentException
-     * @return array
+     * @return Matrix
      */
 	public function coMap(Matrix $b, $function) {
 		if ($this->m != $b->m || $this->n != $b->n) {
@@ -430,7 +491,7 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
 				$result[$i][$j] = $function($this->values[$i][$j], $b->values[$i][$j], $i, $j);
 			}
 		}
-		return $result;
+		return static::create($result);
 	}
 
 
@@ -449,16 +510,48 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
 		for ($i=0; $i < $this->m; $i++) {
             $c[$i] = array();
 			for ($j = 0; $j < $b->n; $j++) {
-				$v = 0;
-				for ($k = 0; $k < $this->n; $k++) {
-					$v += $this->values[$i][$k] * $b->values[$k][$j];
-				}
-				$c[$i][$j] = $v;
+                $c[$i][$j] = $this->row($i)->dot($b->column($j));
 			}
 		}
 
-		return new Matrix($c);
+		return static::create($c);
 	}
-}
 
-?>
+    /**
+     * @param int|float $p
+     * @return number
+     */
+    public function pNorm($p = 2) {
+        return pow(
+            $this->reduce(
+                function($r, $a) use ($p) {
+                    return $r + pow($a, $p);
+                }
+            ),
+            1.0/$p
+        );
+    }
+
+    /**
+     * @return number
+     */
+    public function norm() {
+        return $this->pNorm(2);
+    }
+
+    /**
+     * @return number
+     */
+    public function max() {
+        return $this->reduce(function ($r, $a) {return $a > $r ? $a : $r;}, -INF);
+    }
+
+
+    /**
+     * @return number
+     */
+    public function min() {
+        return $this->reduce(function ($r, $a) {return $a < $r ? $a : $r;}, INF);
+    }
+
+}
