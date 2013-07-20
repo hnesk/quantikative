@@ -70,12 +70,12 @@ class Vector implements \ArrayAccess, \Countable, \Iterator {
      * @return Vector
      */
     public static function create($values = array()) {
+        $values = $values instanceof Vector ? $values->values() : $values;
         if (!is_array($values)) {
             $values = func_get_args();
         }
         return new static($values);
     }
-
 
 	public function toString($format = '%6.2f', $headerFormat = '%6d', $columnSeparator = " ", $lineSeparator = PHP_EOL) {
 		return implode(
