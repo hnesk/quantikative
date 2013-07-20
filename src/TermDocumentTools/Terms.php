@@ -13,7 +13,7 @@ namespace TermDocumentTools;
 class Terms extends Collection {
 
     public function append(Term $t) {
-        $this[] = $t;
+        return parent::add($t);
     }
 
     protected function checkValue($value)

@@ -9,58 +9,30 @@
 
 namespace TermDocumentTools;
 
+use Doctrine\Common\Collections\ArrayCollection;
 
-abstract class Collection implements \IteratorAggregate, \ArrayAccess, \Countable, \JsonSerializable {
+/**
+ * A typesafe Collection class
+ * @package TermDocumentTools
+ */
+abstract class Collection extends ArrayCollection implements \JsonSerializable {
 
     /**
      * @var array
      */
     protected $entries;
 
-    /**
-     * @param array $entries
-     */
-    public function __construct($entries=array()) {
-        foreach ($entries as $k=>$v) {
-            $this[$k] = $v;
-        }
-    }
 
-    public function getIterator()
-    {
-        return new \ArrayIterator($this->entries);
-    }
-
-    public function offsetExists($offset)
-    {
-        return isset($this->entries[$offset]);
-    }
-
-    public function offsetGet($offset)
-    {
-        return $this->entries[$offset];
-    }
-
-    public function offsetSet($offset, $value)
-    {
+    public function set($key, $value) {
         $this->checkValue($value);
-        if ($offset) {
-            $this->entries[$offset] = $value;
-        } else {
-            $this->entries[] = $value;
-        }
-
+        return parent::set($key, $value);
     }
 
-    public function offsetUnset($offset)
-    {
-        unset($this->entries[$offset]);
+    public function add($value) {
+        $this->checkValue($value);
+        return parent::add($value);
     }
 
-    public function count()
-    {
-        return count($this->entries);
-    }
 
     /**
      * @return string
