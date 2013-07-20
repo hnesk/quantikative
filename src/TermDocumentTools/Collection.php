@@ -42,11 +42,19 @@ abstract class Collection extends ArrayCollection implements \JsonSerializable {
     }
 
     /**
+     * Reindexes the collection
+     * @return Collection
+     */
+    public function valueCollection() {
+        return new static($this->getValues());
+    }
+
+    /**
      * @param string $separator
      * @param string $format
      * @return string
      */
-    public function toString($separator = "\n", $format = '%1s => %2s') {
+    public function toString($separator = PHP_EOL, $format = '%1s => %2s') {
         $parts = array();
         foreach ($this as $k => $v) {
             $parts[] = sprintf($format, $k, (string)$v);
