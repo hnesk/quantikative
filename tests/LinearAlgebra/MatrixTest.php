@@ -359,4 +359,67 @@ class MatrixTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(1,Matrix::create($this->values)->min());
     }
 
+
+    public function testFilterRowsWithAllRowsIsIdentical() {
+        $m = Matrix::create($this->values);
+        $filtered = $m->filterRows(array(0=>true, 1=>true));
+        $this->assertEquals($m->values(), $filtered->values());
+    }
+
+    public function testFilterRowsWithArrayPredicate() {
+        $m = Matrix::create($this->values);
+        $filtered = $m->filterRows(array(0=>true));
+        $this->assertEquals(array(array(1,2,3)), $filtered->values());
+    }
+
+
+    public function testFilterRowsWithTruePredicate() {
+        $m = Matrix::create($this->values);
+        $filtered = $m->filterRows(function () { return true;});
+        $this->assertEquals($m->values(), $filtered->values());
+    }
+
+    public function testFilterRowsWithFalsePredicate() {
+        $m = Matrix::create($this->values);
+        $filtered = $m->filterRows(function () { return false;});
+        $this->assertEquals(array(), $filtered->values());
+    }
+
+    public function testFilterRowsWithCallbackPredicate() {
+        $m = Matrix::create($this->values);
+        $filtered = $m->filterRows(function ($i) { return $i==1;});
+        $this->assertEquals(array(array(2,4,5)), $filtered->values());
+    }
+
+    public function testFilterColumnsWithAllRowsIsIdentical() {
+        $m = Matrix::create($this->values);
+        $filtered = $m->filterColumns(array(0=>true, 1=>true, 2=>true));
+        $this->assertEquals($m->values(), $filtered->values());
+    }
+
+    public function testFilterColumnsWithArrayPredicate() {
+        $m = Matrix::create($this->values);
+        $filtered = $m->filterColumns(array(2=>true));
+        $this->assertEquals(array(array(3),array(5)), $filtered->values());
+    }
+
+
+    public function testColumnsRowsWithTruePredicate() {
+        $m = Matrix::create($this->values);
+        $filtered = $m->filterColumns(function () { return true;});
+        $this->assertEquals($m->values(), $filtered->values());
+    }
+
+    public function testFilterColumnsWithFalsePredicate() {
+        $m = Matrix::create($this->values);
+        $filtered = $m->filterColumns(function () { return false;});
+        $this->assertEquals(array(), $filtered->values());
+    }
+
+    public function testFilterColumnsWithCallbackPredicate() {
+        $m = Matrix::create($this->values);
+        $filtered = $m->filterColumns(function ($i) { return $i==1;});
+        $this->assertEquals(array(array(2),array(4)), $filtered->values());
+    }
+
 }

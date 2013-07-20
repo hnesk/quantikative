@@ -468,6 +468,43 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
 
     /**
      *
+     * @param array|callable $filter
+     * @return Matrix
+     */
+    public function filterRows($filter) {
+        $filter = is_callable($filter) ? $filter : function ($i) use($filter) {return isset($filter[$i]);};
+        $result = array();
+        foreach ($this as $i=>$row) {
+            /** @var $row Vector */
+            if ($filter($i, $row)) {
+                $result[] = $row->values();
+            }
+        }
+        return static::create($result);
+    }
+
+
+    /**
+     * @param array|callable $filter
+     * @return Matrix
+     */
+    public function filterColumns($filter) {
+        $filter = is_callable($filter) ? $filter : function ($i) use($filter) {return isset($filter[$i]);};
+        $result = array();
+        for ($i = 0; $i < $this->n; $i++) {
+            $column = $this->column($i);
+            if ($filter($i, $column)) {
+                for ($j = 0; $j < count($column);$j++) {
+                    $result[$j][] = $column[$j];
+                }
+            }
+        }
+        return static::create($result);
+    }
+
+
+    /**
+     *
      * @return string
      */
     public function dim() {

@@ -40,12 +40,12 @@ class TermDocumentMatrixTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testFilterDocumentsWithEmptyFilterReturnsAllDocuments() {
-        $filtered = $this->m->filterDocuments(new ArrayKeyFilter(array()));
+        $filtered = $this->m->filterRows(ArrayKeyFilter::create(array())->toClosure());
         $this->assertEquals($this->m->getDocuments(), $filtered->getDocuments());
     }
 
     public function testFilterTermsWithEmptyFilterReturnsAllTerms() {
-        $filtered = $this->m->filterTerms(new ArrayKeyFilter(array()));
+        $filtered = $this->m->filterColumns(ArrayKeyFilter::create(array())->toClosure());
         $this->assertEquals($this->m->getTerms(), $filtered->getTerms());
     }
 
