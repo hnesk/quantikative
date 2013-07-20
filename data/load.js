@@ -16,7 +16,8 @@ var filename = process.argv[2],
     out = {
         parties: data.WOMT_aParteien,
         theses: data.WOMT_aThesen,
-        matrix: data.WOMT_aThesenParteien
+        matrix: data.WOMT_aThesenParteien,
+        reason: data.WOMT_aThesenParteienText
     };
 //process.stdout.write(util.inspect(out, {depth:null}));
 process.stdout.write(util.format("%j", out));
