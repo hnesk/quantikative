@@ -31,8 +31,12 @@ class Application extends BaseApplication {
     protected function registerRoutes() {
         $this->register(new UrlGeneratorServiceProvider());
 
-        $this->get('/wahlomat/{dataSet}', 'Wahlomat\Controller::index')->value('dataSet','bundestagswahl2009')->bind('wahlomat');
+        $this->get('/wahlomat/{dataSet}/', 'Wahlomat\Controller::index')->value('dataSet','bundestagswahl2009')->bind('wahlomat');
+        $this->get('/wahlomat/{dataSet}/eigen', 'Wahlomat\Controller::eigen')->value('dataSet','bundestagswahl2009')->bind('wahlomat_eigen');
+        $this->get('/wahlomat/{dataSet}/parties/', 'Wahlomat\Controller::parties')->value('dataSet','bundestagswahl2009')->bind('wahlomat_parties');
         $this->get('/wahlomat/{dataSet}/api/', 'Wahlomat\Controller::json')->bind('wahlomat_api');
+        $this->get('/wahlomat/{dataSet}/cluster/', 'Wahlomat\Controller::cluster')->value('dataSet','bundestagswahl2009')->bind('wahlomat_cluster');
+
     }
 
 

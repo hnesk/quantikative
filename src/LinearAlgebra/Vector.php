@@ -2,7 +2,7 @@
 
 namespace LinearAlgebra;
 
-class Vector implements \ArrayAccess, \Countable, \Iterator {
+class Vector implements \ArrayAccess, \Countable, \Iterator, Measureable{
 
 	/**
 	 * @var array
@@ -156,6 +156,11 @@ class Vector implements \ArrayAccess, \Countable, \Iterator {
 		return $this->dot($b) / ($this->norm() * $b->norm());
 	}
 
+
+    public function distance(Measureable $b) {
+        return $this->subtract($b)->norm();
+    }
+
 	public function norm() {
 		return sqrt($this->dot($this));
 	}
@@ -181,8 +186,24 @@ class Vector implements \ArrayAccess, \Countable, \Iterator {
 	}
 
 
+    /**
+     * @return number
+     */
+    public function max() {
+        return max($this->values);
+    }
 
-	public function map($function) {
+
+    /**
+     * @return number
+     */
+    public function min() {
+        return min($this->values);
+    }
+
+
+
+    public function map($function) {
 		$result = array();
 		for ($i=0; $i < $this->m; $i++) {
 			$result[] = $function($this->values[$i], $i);
@@ -198,6 +219,20 @@ class Vector implements \ArrayAccess, \Countable, \Iterator {
 		}
 		return $result;
 	}
+
+    /**
+     *
+     * @param Callable $function
+     * @param mixed $result
+     * @return number
+     */
+    public function reduce($function, $result = 0) {
+        for ($i=0; $i < $this->m; $i++) {
+            $result = $function($result,$this->values[$i], $i);
+        }
+        return $result;
+    }
+
 
 
 }

@@ -1,6 +1,9 @@
 all: bundestag europaparlament landtag
 
-bundestag: bundestagswahl2009 bundestagswahl2005
+bundestag: bundestagswahl2013 bundestagswahl2009 bundestagswahl2005
+
+bundestagswahl2013:
+	cd bundestagswahl2013 &&  $(MAKE)
 
 bundestagswahl2009:
 	cd bundestagswahl2009 &&  $(MAKE)
@@ -16,14 +19,16 @@ europa2004:
 	cd europa2004 &&  $(MAKE)
 
 
-landtag: nrw2012 niedersachsen2013 schleswigholstein2012 saarland2012 berlin2011 bremen2011 bw2011 rlp2011 hamburg2011 nrw2010 hamburg2008 niedersachsen2008 bremen2007 berlin2006 bw2006 rlp2006 sachsenanhalt2006 nrw2005 schleswigholstein2005 sachsen2004 bayern2003
+landtag: bayern2013 niedersachsen2013 nrw2012 schleswigholstein2012 saarland2012 berlin2011 bremen2011 bw2011 rlp2011 hamburg2011 nrw2010 hamburg2008 niedersachsen2008 bremen2007 berlin2006 bw2006 rlp2006 sachsenanhalt2006 nrw2005 schleswigholstein2005 sachsen2004 bayern2003
 
-
-nrw2012:
-	cd nrw2012 &&  $(MAKE)
+bayern2013:
+	cd bayern2013 && $(MAKE)
 
 niedersachsen2013:
 	cd niedersachsen2013 &&  $(MAKE)
+
+nrw2012:
+	cd nrw2012 &&  $(MAKE)
 
 schleswigholstein2012:
 	cd schleswigholstein2012 &&  $(MAKE)
@@ -81,6 +86,7 @@ sachsen2004:
 
 bayern2003:
 	cd bayern2003 &&  $(MAKE)
+
 
 clean:
 	rm */data.js

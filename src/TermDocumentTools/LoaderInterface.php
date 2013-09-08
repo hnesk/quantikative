@@ -13,12 +13,18 @@ use TermDocumentTools\TermDocumentMatrix;
 
 interface LoaderInterface {
 
+    const DATA_TYPE_VALUE = 0;
+    const DATA_TYPE_REASON = 1;
+
+
     /**
      * @param string $dataSet
-     * @param int $langId
+     * @param int $langId (0=german / 1=english)
+     * @param int $dataType
+     * @throws \InvalidArgumentException
      * @return TermDocumentMatrix
      */
-    public function load($dataSet, $langId = 0);
+    public function load($dataSet, $langId = 0, $dataType = self::DATA_TYPE_VALUE);
 
     /**
      * @return array<string>

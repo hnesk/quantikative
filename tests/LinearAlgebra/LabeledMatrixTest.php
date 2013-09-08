@@ -108,19 +108,5 @@ class LabeledMatrixTest extends \PHPUnit_Framework_TestCase {
     }
 
 
-
-    /**
-     * @param string $format
-     * @return string
-     */
-	public function toCSV($format = '%10.4F') {
-		$csv = '';
-        /** @var $row Vector */
-		foreach ($this->values as $row) {
-			$csv .= implode(',',  array_map(function ($value) use ($format) {return sprintf($format, $value);}, $row->values())).PHP_EOL;
-		}
-		return $csv;
-	}
-
 }
 ?>

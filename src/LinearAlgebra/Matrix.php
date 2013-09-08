@@ -3,7 +3,7 @@
 namespace LinearAlgebra;
 
 
-class Matrix implements \ArrayAccess, \Countable, \Iterator {
+class Matrix implements \ArrayAccess, \Countable, \Iterator, \JsonSerializable {
 
 	/**
 	 * @var array
@@ -31,9 +31,10 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
 
     /**
      * @param array $values
+     * @param bool $forceNumeric
      * @throws \InvalidArgumentException
      */
-    public function __construct($values = array()) {
+    public function __construct($values = array(), $forceNumeric = false) {
 		$this->values = array();
 		$this->m = count($values);
 
@@ -49,7 +50,7 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
 				throw new \InvalidArgumentException('array must have the same number of columns in each row');
 			}
 			for ($j = 0; $j < $this->n; $j++) {
-				$this->values[$i][$j] = $values[$i][$j];
+				$this->values[$i][$j] = $forceNumeric ? (1*$values[$i][$j]) : $values[$i][$j];
 			}
 
 		}
@@ -113,10 +114,11 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
 
     /**
      * @param array $values
+     * @param bool $forceNumeric
      * @return Matrix
      */
-    public static function create($values = array()) {
-        return new static($values);
+    public static function create($values = array(), $forceNumeric = false) {
+        return new static($values, $forceNumeric);
 
     }
 
@@ -147,6 +149,19 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
 		return Vector::create($this->values[$i]);
 	}
 
+
+    /**
+     * @param array $map
+     * @return Matrix
+     */
+    public function permute($map) {
+        $values = array();
+        foreach ($map as $newIndex => $oldIndex) {
+            $values[$newIndex] = $this->values[$oldIndex];
+        }
+
+        return new static($values);
+    }
 
 	/**
 	 *
@@ -192,46 +207,57 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
         return $this->index($i, $i);
     }
 
+    protected static function toFormattingCallback($format) {
+        if (is_null($format)) {
+            return function ($value) {return '';};
+        } else if (is_object($format) && $format instanceof ArrayAccess) {
+
+        } else if (is_callable($format)) {
+            return $format;
+        } else if (is_string($format)) {
+            return function ($value) use ($format) {return sprintf($format, $value);};
+        }
+
+    }
 
     /**
      *
      * @param string $format
-     * @param string $headerFormat
+     * @param string $columnHeaderFormat
+     * @param string $rowHeaderFormat
      * @param string $columnSeparator
-     * @param string $lineSeparator
+     * @param string $rowSeparator
+     * @internal param string $headerFormat
      * @return string
      */
-	public function toString($format = '%6.2f', $headerFormat = '%6d', $columnSeparator = " ", $lineSeparator = PHP_EOL) {
+	public function toString($format = '%6.2f', $columnHeaderFormat = '%6d', $rowHeaderFormat = '%6d', $columnSeparator = " ", $rowSeparator = PHP_EOL) {
+        $format = static::toFormattingCallback($format);
+        $columnHeaderFormat = static::toFormattingCallback($columnHeaderFormat);
+        $rowHeaderFormat = static::toFormattingCallback($rowHeaderFormat);
 
         $firstLine = current($this->values());
+
 		$csv =
-            strtr(sprintf($headerFormat, 0),'0',' ') .
+            strtr($rowHeaderFormat(0),'0',' ') .
             $columnSeparator .
             implode(
                 $columnSeparator,
-                array_map(
-                    function ($value) use ($headerFormat) {
-			            return sprintf($headerFormat, $value);
-		            },
-                    array_keys($firstLine)
-                )
+                array_map($columnHeaderFormat, array_keys($firstLine))
             ) .
-            $lineSeparator . $lineSeparator;
+            $rowSeparator . $rowSeparator;
 
 		foreach ($this->values as $k => $row) {
 			$csv .=
-                sprintf($headerFormat, $k) .
+                $rowHeaderFormat($k) .
                 $columnSeparator .
                 implode(
                     $columnSeparator,
                     array_map(
-                        function ($value) use ($format) {
-							return sprintf($format, $value);
-						},
+                        $format,
                         $row
                     )
                 ) .
-                $lineSeparator;
+                $rowSeparator;
 		}
 		return $csv;
 	}
@@ -453,7 +479,7 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
     /**
      *
      * @param Callable $function
-     * @param int $result
+     * @param mixed $result
      * @return number
      */
     public function reduce($function, $result = 0) {
@@ -533,12 +559,32 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
 
 
     /**
+     * @param Matrix $b
+     * @return Matrix
+     */
+    public function multiply(Matrix $b) {
+        return $this->coWalk($b, function(Vector $aRow, Vector $bColumn) {return $aRow->dot($bColumn);});
+    }
+
+    /**
+     * @param Matrix $b
+     * @return Matrix
+     */
+    public function cosine(Matrix $b) {
+        return $this->coWalk($b, function(Vector $aRow, Vector $bColumn) {return $aRow->cosine($bColumn);});
+    }
+
+
+
+    /**
+     *
      *
      * @param Matrix $b
+     * @param callback $function
      * @throws \InvalidArgumentException
      * @return Matrix
      */
-	public function multiply(Matrix $b) {
+	public function coWalk(Matrix $b, $function) {
 		if ($this->n != $b->m) {
 			throw new \InvalidArgumentException('Matrix b incompatible: '.$this->n .' != ' .$b->m);
 		}
@@ -547,7 +593,7 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
 		for ($i=0; $i < $this->m; $i++) {
             $c[$i] = array();
 			for ($j = 0; $j < $b->n; $j++) {
-                $c[$i][$j] = $this->row($i)->dot($b->column($j));
+                $c[$i][$j] = $function($this->row($i), $b->column($j));
 			}
 		}
 
@@ -591,4 +637,22 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator {
         return $this->reduce(function ($r, $a) {return $a < $r ? $a : $r;}, INF);
     }
 
+
+
+
+    public function toObject() {
+        return $this->values;
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.4.0)<br/>
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     */
+    public function jsonSerialize()
+    {
+        return $this->toObject();
+    }
 }

@@ -73,6 +73,7 @@ class LabeledMatrix implements \JsonSerializable {
      */
 	public function filterRows($filter) {
         $filter = is_callable($filter) ? $filter : function ($i) use($filter) {return isset($filter[$i]);};
+        /* @var $rowLabels Collection */
 		$rowLabels = $this->rowLabels->filter($filter);
         $keepKeys = array_flip($rowLabels->getKeys());
 
@@ -90,6 +91,7 @@ class LabeledMatrix implements \JsonSerializable {
      */
 	public function filterColumns($filter) {
         $filter = is_callable($filter) ? $filter : function ($i) use($filter) {return isset($filter[$i]);};
+        /* @var $columnLabels Collection */
         $columnLabels = $this->columnLabels->filter($filter);
         $keepKeys = array_flip($columnLabels->getKeys());
 
@@ -115,12 +117,24 @@ class LabeledMatrix implements \JsonSerializable {
 	}
 
 
+    public function toString($format = '%9.2f', $columnSeparator = " ", $lineSeparator = PHP_EOL) {
+        $columnLabels = $this->columnLabels;
+        $columnHeaderFormat = function ($key) use ($columnLabels) {
+            return sprintf('%9s',$columnLabels->offsetGet($key));
+        };
+        $rowLabels = $this->rowLabels;
+        $rowHeaderFormat = function ($key) use ($rowLabels) {
+            return sprintf('%9s',$rowLabels->offsetGet($key));
+        };
+
+        return $this->getValues()->toString($format, $columnHeaderFormat, $rowHeaderFormat, $columnSeparator, $lineSeparator);
+    }
 
     /**
      * @return string
      */
     public function __toString() {
-        return $this->getValues()->toString();
+        return $this->toString();
     }
 
     /**
@@ -141,8 +155,8 @@ class LabeledMatrix implements \JsonSerializable {
     public function toObject() {
         return (object) array(
             'plot' => $this->values->values(),
-            'rowLabels' => $this->getRowLabels()->jsonSerialize(),
-            'columnLabels' => $this->getColumnLabels()->jsonSerialize()
+            'rowLabels' => $this->getRowLabels()->toObject(),
+            'columnLabels' => $this->getColumnLabels()->toObject()
         );
     }
 

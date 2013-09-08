@@ -20,7 +20,9 @@ function multiSelect() {
     function chart(currentSelection) {
         selection = currentSelection[0][0];
         currentSelection.each(function(data) {
-            var list = d3.select(this).selectAll('ul').data([data], function (d) {return d.index;});
+            var list = d3.select(this).selectAll('ul').data([data], function (d) {
+                return d.index;
+            });
             list.enter().append("ul").attr('class', chartName+' multiselect');
 
             var items = list.selectAll('li').data(data, itemIndex);

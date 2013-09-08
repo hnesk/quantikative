@@ -32,7 +32,7 @@ function wahlomat(apiBaseUrl) {
             buildUrl(apiBaseUrl, filter),
             function(data) {
                 d3.select("#scatter").datum(data.plot).call(self.chart);
-                d3.select("#partySelect").datum(data.parties).call(self.partySelect);
+                d3.select("#partySelect").datum(data.documents).call(self.partySelect);
                 d3.select("#thesisSelect").datum(data.terms).call(self.thesisSelect);
             }
         );

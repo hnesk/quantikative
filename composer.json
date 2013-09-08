@@ -13,7 +13,8 @@
         "psr-0": {
             "Wahlomat": "src/",
             "LinearAlgebra": "src/",
-            "TermDocumentTools": "src/"
+            "TermDocumentTools": "src/",
+            "Statistics": "src/"
         }
     }
 }

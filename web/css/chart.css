@@ -3,8 +3,6 @@
 	border: solid 1px #ddd;
 	box-shadow: 0 0 4px rgba(0,0,0,.2);
 	font: 10px sans-serif;
-	height: 600px;
-	width: 600px;
 }
 
 .chart circle.little {
@@ -59,4 +57,15 @@
 .chart .data rect {
 	fill: #eee;
 	stroke: #ccc;
+}
+
+
+path.line {
+    fill: none;
+    stroke: #666;
+    stroke-width: 1.5px;
+}
+
+path.area {
+    fill: #e7e7e7;
 }

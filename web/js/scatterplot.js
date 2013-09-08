@@ -7,7 +7,7 @@
  */
 function scatterPlot() {
     var
-        width = 800,
+        width = 600,
         height = 600,
         returnIndex = function (index) {
             return function (data) {
@@ -46,6 +46,12 @@ function scatterPlot() {
                 .attr("transform",		function (d) {return 'translate('+scale(d.x)+' '+scale(d.y)+')';})
                 .attr('class',  function (d) {return d.type;});
             gEnter
+                .transition()
+                .duration(500)
+                .style('opacity',1)
+            ;
+
+            gEnter
                 .append("circle")
                 .attr("title",	function (d) {return d.short;})
                 .attr("r",		function (d) {return d.type == 'term' ? 3 : 5;})
@@ -64,8 +70,22 @@ function scatterPlot() {
                 .select('text').text(function (d) {return d.short;})
             ;
 
-            point.exit()
+            var gExit = point.exit();
+
+
+            gExit
+                .transition().duration(500)
+                .style('opacity',0)
+                .remove()
+            ;
+
+            gExit.select('circle')
+                .transition()
+                .duration(500)
+                .attr("r",0)
                 .remove();
+            ;
+
         });
     }
 

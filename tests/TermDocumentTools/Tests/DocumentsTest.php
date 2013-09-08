@@ -2,14 +2,10 @@
 
 namespace TermDocumentTools\Tests;
 
-use LinearAlgebra\Matrix;
 use LinearAlgebra\Vector;
-use TermDocumentTools\ArrayKeyFilter;
 use TermDocumentTools\Document;
 use TermDocumentTools\Documents;
 use TermDocumentTools\Term;
-use TermDocumentTools\TermDocumentMatrix;
-use TermDocumentTools\Terms;
 
 class DocumentsTest extends \PHPUnit_Framework_TestCase {
 
@@ -35,6 +31,7 @@ class DocumentsTest extends \PHPUnit_Framework_TestCase {
      */
     public function testTypeSafetyAppend() {
         $documents = new Documents();
+        /** @noinspection PhpParamsInspection */
         $documents->append(new Term('a','aa'));
     }
 

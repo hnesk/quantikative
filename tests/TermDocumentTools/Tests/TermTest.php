@@ -2,14 +2,7 @@
 
 namespace TermDocumentTools\Tests;
 
-use LinearAlgebra\Matrix;
-use LinearAlgebra\Vector;
-use TermDocumentTools\ArrayKeyFilter;
-use TermDocumentTools\Document;
-use TermDocumentTools\Documents;
 use TermDocumentTools\Term;
-use TermDocumentTools\TermDocumentMatrix;
-use TermDocumentTools\Terms;
 
 class TermTest extends \PHPUnit_Framework_TestCase {
 

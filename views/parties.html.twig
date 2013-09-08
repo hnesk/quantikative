@@ -1,0 +1,122 @@
+{% extends layout %}
+{% block title %}Index{% endblock %}
+{% block content %}
+<style type="text/css">
+    table.matrix {
+        border-collapse: separate;
+        /* border-spacing: 2px; */
+    }
+
+    table.matrix td {
+        font-size: 10px;
+        font-family: "Ubuntu Mono",monospace;
+        width:30px;
+        height:30px;
+        text-align: right;
+        padding-right:4px;
+        border:1px solid #efeff8;
+        border-radius: 1px;
+    }
+
+    table.matrix th {
+        font-size:10px;
+        padding:5px;
+        background-color:#efeff8;
+    }
+
+    table.matrix thead th {
+        width:30px;
+        height:60px;
+        position: relative;
+    }
+
+    table.matrix tbody th {
+        text-align: right;
+    }
+
+    table.matrix thead th span {
+        position: absolute;
+        top:20px;
+        left:-15px;
+        width: 60px;
+        transform: rotate(-90deg);
+        -moz-transform: rotate(-90deg);
+        -webkit-transform: rotate(-90deg);
+    }
+
+
+    table.thesisTable {
+        border-collapse: collapse;
+        border:1px hidden #efeff8;
+        width: 480px;
+    }
+
+    table.thesisTable th.partyhead {
+        width:70px;
+    }
+
+    table.thesisTable th.partyhead-0, table.thesisTable td.party-0 {
+        text-align: right;
+    }
+
+    table.thesisTable td, table.thesisTable th {
+
+        border:1px solid #ccc;
+        border-radius: 2px;
+        font-size:12px;
+        padding:1px 5px;
+    }
+
+    #parties {
+        width: 480px;
+        float: left;
+    }
+
+    #terms {
+        width: 480px;
+        float: right;
+    }
+
+</style>
+<div id="wahlomat" class="clearfix">
+    <div id="parties" class="chart similarityMatrix">
+        <h3>Ähnlichkeiten der Parteien untereinander</h3>
+    </div>
+    <div id="terms" class="chart thesisTable">
+        <h3>Thesen</h3>
+    </div>
+</div>
+<script src="{{ app.request.baseUrl }}/js/vendor/d3.v3.js"></script>
+<script src="{{ app.request.baseUrl }}/js/util.js"></script>
+<script src="{{ app.request.baseUrl }}/js/similarityMatrix.js"></script>
+<script src="{{ app.request.baseUrl }}/js/thesisTable.js"></script>
+<script src="{{ app.request.baseUrl }}/js/thesisCloud.js"></script>
+<script>
+    var data = {
+        partySimilarityMatrix : {{ ddm|json_encode|raw }},
+        theses : {{ terms|json_encode|raw }},
+        answers : {{ answers|json_encode|raw }}
+    };
+</script>
+<script>
+
+</script>
+<script>
+    similarityMatrix.init(
+            d3.select('#parties'),
+            data.partySimilarityMatrix.values,
+            data.partySimilarityMatrix.documents
+    );
+
+    thesisCloud.init(
+            d3.select('#terms'),
+            data.theses,
+            data.answers,
+            data.partySimilarityMatrix.documents
+    );
+
+    similarityMatrix.dispatcher.on('selected', thesisCloud.select.bind(thesisCloud));
+
+
+</script>
+{% endblock %}

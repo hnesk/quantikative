@@ -40,12 +40,6 @@ class MatrixTest extends \PHPUnit_Framework_TestCase {
 
 
     public function testConstructorSetsValues() {
-        $values = array(
-            array(3,4),
-            array(1,2),
-            array(0,9)
-        );
-
         $m = new Matrix($this->values);
         $this->assertEquals(2, $m->m());
         $this->assertEquals(3, $m->n());

@@ -311,8 +311,6 @@ class SVD {
 			}
 		} while ($inc > 1);
 
-		// flip signs
-		/*
 		for ($k=0;$k<$n;$k++) {
 			$s=0;
 			for ($i=0; $i<$m; $i++) {
@@ -335,7 +333,6 @@ class SVD {
 				}
 			}
 		}
-		 */
 
 	}
 

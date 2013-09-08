@@ -96,6 +96,7 @@ class Feature implements \JsonSerializable {
      * @return float
      */
     public function getValue($entry) {
+        /** @noinspection PhpUnusedLocalVariableInspection */
         $value = 0;
         if ($entry instanceof Term) {
             $value = $this->termValues[$entry->id()];

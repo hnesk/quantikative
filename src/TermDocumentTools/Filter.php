@@ -16,10 +16,10 @@ abstract class Filter {
      * @return \Closure
      */
     public function toClosure() {
-
         $f = function ($value, $index = null) {
             return $this->__invoke($value, $index);
         };
+        /** @noinspection PhpUndefinedMethodInspection */
         return $f->bindTo($this, $this);
     }
 

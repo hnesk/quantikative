@@ -9,13 +9,12 @@
     </div>
 </div>
 
-
 <ul>
     {% for key, label in dataSets %}
         <li {% if key == dataSet %}class="active"{% endif %}><a href="{{ path('wahlomat', {dataSet:key}) }}">{{ label }}</a></li>
     {% endfor %}
 </ul>
-<script src="{{ app.request.baseUrl }}/js/vendor/d3.v2.js"></script>
+<script src="{{ app.request.baseUrl }}/js/vendor/d3.v3.js"></script>
 <script src="{{ app.request.baseUrl }}/js/scatterplot.js"></script>
 <script src="{{ app.request.baseUrl }}/js/multiSelect.js"></script>
 <script src="{{ app.request.baseUrl }}/js/wahlomat.js"></script>

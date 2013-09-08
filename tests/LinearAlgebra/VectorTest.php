@@ -102,7 +102,7 @@ class VectorTest extends \PHPUnit_Framework_TestCase {
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testOffsetUnsetThowsBadMethodCallException() {
+    public function testOffsetUnsetThrowsBadMethodCallException() {
 		unset($this->v[0]);
 	}
 

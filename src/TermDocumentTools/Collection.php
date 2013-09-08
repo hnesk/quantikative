@@ -12,20 +12,15 @@ namespace TermDocumentTools;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * A typesafe Collection class
+ * A type safe Collection class
  * @package TermDocumentTools
  */
 abstract class Collection extends ArrayCollection implements \JsonSerializable {
 
-    /**
-     * @var array
-     */
-    protected $entries;
-
 
     public function set($key, $value) {
         $this->checkValue($value);
-        return parent::set($key, $value);
+        parent::set($key, $value);
     }
 
     public function add($value) {
@@ -42,7 +37,7 @@ abstract class Collection extends ArrayCollection implements \JsonSerializable {
     }
 
     /**
-     * Reindexes the collection
+     * Re-indexes the collection
      * @return Collection
      */
     public function valueCollection() {
@@ -67,7 +62,20 @@ abstract class Collection extends ArrayCollection implements \JsonSerializable {
     }
 
     public function toObject() {
-        return $this->entries;
+        return $this->toArray();
+    }
+
+    /**
+     * @param array $map
+     * @return static
+     */
+    public function permute($map) {
+        $values = array();
+        foreach ($map as $newIndex => $oldIndex) {
+            $values[$newIndex] = $this[$oldIndex];
+        }
+
+        return new static($values);
     }
 
     /**
