@@ -210,7 +210,7 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator, \JsonSerializable {
     protected static function toFormattingCallback($format) {
         if (is_null($format)) {
             return function ($value) {return '';};
-        } else if (is_object($format) && $format instanceof ArrayAccess) {
+        } else if (is_object($format) && $format instanceof \ArrayAccess) {
 
         } else if (is_callable($format)) {
             return $format;

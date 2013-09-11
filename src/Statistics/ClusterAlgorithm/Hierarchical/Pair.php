@@ -11,8 +11,14 @@ namespace Statistics\ClusterAlgorithm\Hierarchical;
 
 class Pair extends Cluster  {
 
+    /**
+     * @var Cluster
+     */
     protected $left;
 
+    /**
+     * @var Cluster
+     */
     protected $right;
 
     static $NR = -1;

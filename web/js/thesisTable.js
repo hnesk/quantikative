@@ -7,8 +7,8 @@ var thesisTable = {
 
     init: function (rootSelection, theses, answers) {
         this.answers = answers;
-        var table = rootSelection.append("table").attr('class', 'thesisTable')
-        thead = table.append("thead"),
+        var table = rootSelection.append("table").attr('class', 'thesisTable'),
+            thead = table.append("thead"),
             tbody = table.append("tbody")
         ;
 

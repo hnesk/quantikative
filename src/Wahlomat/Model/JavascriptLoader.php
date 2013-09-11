@@ -116,6 +116,8 @@ class JavascriptLoader implements LoaderInterface {
             $matrix = Matrix::create($data->matrix, true)->transpose();
         } else if ($dataType === self::DATA_TYPE_REASON) {
             $matrix = Matrix::create($data->reason, false)->transpose();
+        } else {
+            throw new \InvalidArgumentException('$dataType is invalid');
         }
 
         return new TermDocumentMatrix($terms, $documents, $matrix);
@@ -139,7 +141,7 @@ class JavascriptLoader implements LoaderInterface {
     }
 
     /**
-     * @param string $party
+     * @param string $thesis
      * @return string
      */
     public static function shortenThesis($thesis) {

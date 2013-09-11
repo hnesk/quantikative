@@ -9,11 +9,6 @@
 
 namespace Wahlomat\Model;
 
-use LinearAlgebra\Matrix;
-use TermDocumentTools\Document;
-use TermDocumentTools\Documents;
-use TermDocumentTools\Term;
-use TermDocumentTools\Terms;
 use TermDocumentTools\TermDocumentMatrix;
 use TermDocumentTools\LoaderInterface;
 

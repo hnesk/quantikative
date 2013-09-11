@@ -23,7 +23,7 @@ use TermDocumentTools\TermDocumentMatrix;
 use Wahlomat\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Wahlomat\Model\JavascriptLoader;
-use Statistics\Cluster\Generator;
+
 
 class Controller {
 

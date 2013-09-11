@@ -12,8 +12,8 @@ function linePlot() {
         height = 500 - margin.top - margin.bottom,
         xValue = function(d,i) { return i; },
         yValue = function(d,i) { return d; },
-        xScale = d3.scale.linear();
-        yScale = d3.scale.linear();
+        xScale = d3.scale.linear(),
+        yScale = d3.scale.linear(),
 
         xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickSize(10,1,1),
         yAxis = d3.svg.axis().scale(yScale).orient("left").tickSize(10,1,1),
