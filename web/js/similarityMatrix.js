@@ -22,15 +22,15 @@ var similarityMatrix = {
         return function(d,i) {
             var column = i;
             var row = this.parentNode.dataset.index;
-            table.selectAll('tr.row-'+row+' td.item, td.item.column-'+column).transition().style('border-color',color);
-            table.selectAll('tr.row-'+row+' th, th.column-'+column).transition().style('background-color',color);
-            table.selectAll('tr.row-'+row+' td.item.column-'+column).transition().style('border-color',cursorColor);
+            table.selectAll('tr.row-'+row+' td.item, td.item.column-'+column).style('border-color',color);
+            table.selectAll('tr.row-'+row+' th, th.column-'+column).style('background-color',color);
+            table.selectAll('tr.row-'+row+' td.item.column-'+column).style('border-color',cursorColor);
         }
     },
 
-    tableHighlightColor : '#cccccc',
-    cursorHighlightColor : '#333333',
-    tableDefaultColor : '#efeff8',
+    tableHighlightColor : 'rgb(204,204,204)',
+    cursorHighlightColor : 'rgb(51,51,51)',
+    tableDefaultColor : 'rgb(239,239,248)',
 
 
     dispatcher : null,
@@ -45,7 +45,7 @@ var similarityMatrix = {
 
             highlightOn = similarityMatrix.tableHighlight(table, similarityMatrix.tableHighlightColor, similarityMatrix.cursorHighlightColor),
             highlightOff = similarityMatrix.tableHighlight(table, similarityMatrix.tableDefaultColor, similarityMatrix.tableDefaultColor),
-            highlightCurrent = similarityMatrix.tableHighlight(table, '#333', '#000'),
+            highlightCurrent = similarityMatrix.tableHighlight(table, '#fff', '#000'),
             minValue = d3.min(values, function (row) {return d3.min(row);}),
             maxValue = d3.max(values, function (row) {return d3.max(row);}),
             self = this;
@@ -75,7 +75,7 @@ var similarityMatrix = {
         var cellsEnter = cells.enter().append('td');
 
         cellsEnter
-            .filter(function (d,i) {return  i <= this.parentNode.dataset.index;})
+            //.filter(function (d,i) {return  i <= this.parentNode.dataset.index;})
             .datum(function (d,i) {return d;})
             .attr('title',function (d,i) {return documents[this.parentNode.dataset.index].short + '   /   ' + documents[i].short + '  =  ' + self.numberFormat(d);})
             .attr('class',function (d,i) {return 'item column-'+i ;})

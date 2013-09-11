@@ -1,83 +1,48 @@
 {% extends layout %}
-{% block title %}Index{% endblock %}
+
+{% block title %}Wahlomat zu - Ähnlichkeiten der Parteien{% endblock %}
+
+{% block style %}
+    {{ parent() }}
+    <link href="{{ app.request.baseUrl }}/css/matrixTable.css" rel="stylesheet">
+    <style type="text/css">
+
+        table.thesisTable {
+            border-collapse: collapse;
+            border:1px hidden #efeff8;
+            width: 480px;
+        }
+
+        table.thesisTable th.partyhead {
+            width:70px;
+        }
+
+        table.thesisTable th.partyhead-0, table.thesisTable td.party-0 {
+            text-align: right;
+        }
+
+        table.thesisTable td, table.thesisTable th {
+
+            border:1px solid #ccc;
+            border-radius: 2px;
+            font-size:12px;
+            padding:1px 5px;
+        }
+
+        #parties {
+            width: 480px;
+            float: left;
+        }
+
+        #terms {
+            width: 480px;
+            float: right;
+        }
+
+    </style>
+{% endblock %}
+
 {% block content %}
-<style type="text/css">
-    table.matrix {
-        border-collapse: separate;
-        /* border-spacing: 2px; */
-    }
-
-    table.matrix td {
-        font-size: 10px;
-        font-family: "Ubuntu Mono",monospace;
-        width:30px;
-        height:30px;
-        text-align: right;
-        padding-right:4px;
-        border:1px solid #efeff8;
-        border-radius: 1px;
-    }
-
-    table.matrix th {
-        font-size:10px;
-        padding:5px;
-        background-color:#efeff8;
-    }
-
-    table.matrix thead th {
-        width:30px;
-        height:60px;
-        position: relative;
-    }
-
-    table.matrix tbody th {
-        text-align: right;
-    }
-
-    table.matrix thead th span {
-        position: absolute;
-        top:20px;
-        left:-15px;
-        width: 60px;
-        transform: rotate(-90deg);
-        -moz-transform: rotate(-90deg);
-        -webkit-transform: rotate(-90deg);
-    }
-
-
-    table.thesisTable {
-        border-collapse: collapse;
-        border:1px hidden #efeff8;
-        width: 480px;
-    }
-
-    table.thesisTable th.partyhead {
-        width:70px;
-    }
-
-    table.thesisTable th.partyhead-0, table.thesisTable td.party-0 {
-        text-align: right;
-    }
-
-    table.thesisTable td, table.thesisTable th {
-
-        border:1px solid #ccc;
-        border-radius: 2px;
-        font-size:12px;
-        padding:1px 5px;
-    }
-
-    #parties {
-        width: 480px;
-        float: left;
-    }
-
-    #terms {
-        width: 480px;
-        float: right;
-    }
-
-</style>
 <div id="wahlomat" class="clearfix">
     <div id="parties" class="chart similarityMatrix">
         <h3>Ähnlichkeiten der Parteien untereinander</h3>
@@ -86,6 +51,11 @@
         <h3>Thesen</h3>
     </div>
 </div>
+{% endblock %}
+
+
+{% block footer_js %}
+{{ parent() }}
 <script src="{{ app.request.baseUrl }}/js/vendor/d3.v3.js"></script>
 <script src="{{ app.request.baseUrl }}/js/util.js"></script>
 <script src="{{ app.request.baseUrl }}/js/similarityMatrix.js"></script>

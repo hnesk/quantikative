@@ -28,7 +28,7 @@ var partyMatrix = {
     dispatcher : null,
 
 
-    init : function (rootSelection, values, columnData, rowData) {
+    init : function (rootSelection, values, columnData, rowData, additional) {
 
         var table = rootSelection.append("table").attr('class', 'matrix partyMatrix'),
             thead = table.append("thead"),
@@ -37,7 +37,6 @@ var partyMatrix = {
 
             highlightOn = partyMatrix.tableHighlight(table, partyMatrix.tableHighlightColor, partyMatrix.cursorHighlightColor),
             highlightOff = partyMatrix.tableHighlight(table, partyMatrix.tableDefaultColor, partyMatrix.tableDefaultColor),
-            highlightCurrent = partyMatrix.tableHighlight(table, '#333', '#000'),
             minValue = d3.min(values, function (row) {return d3.min(row);}),
             maxValue = d3.max(values, function (row) {return d3.max(row);}),
             self = this;
@@ -49,10 +48,10 @@ var partyMatrix = {
 
         function buildCell(selection) {
             selection
-                .attr('title',function (d,i) {
-                    return columnData[i].short + ': ' + rowData[this.parentNode.dataset.index].short;
-                    // (d > 0 ? 'Ja' : (d < 0 ? 'Nein' : '---')) + ' : ' +
+                .each(function (d,i) {
+                    this.dataset.reason = additional[this.parentNode.dataset.index][i];
                 })
+                .attr('title',function (d,i) {return columnData[i].short + ' zu "' + rowData[this.parentNode.dataset.index].short+'"';})
                 .attr('class',function (d,i) {return 'item column-'+i ;})
                 .style('background-color', this.colors)
                 .style('color', this.colorsText)
@@ -84,10 +83,9 @@ var partyMatrix = {
 
         var rows = tbody.selectAll('tr').data(rowData).enter()
                 .append('tr')
-                .datum(function (d,i) {this.dataset.index = i;return d;})
+                .each(function (d,i) {this.dataset.index = i;})
                 .attr('class', function (d,i) {return 'row-'+i;})
-            ;
-
+        ;
 
         var cells = rows.selectAll('td').data(function (d,i) {return values[i];}).call(buildCell.bind(this));
         cells.enter().append('td').call(buildCell.bind(this));
@@ -99,4 +97,4 @@ var partyMatrix = {
                     .text(util.access('short'))
                     .attr('title', util.access('long'));
     }
-}
+};

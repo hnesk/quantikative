@@ -14,6 +14,7 @@ use Silex\Provider\MonologServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
+use SilexAssetic\AsseticServiceProvider;
 
 class Application extends BaseApplication {
 
@@ -24,18 +25,18 @@ class Application extends BaseApplication {
         $this->registerLogging();
         $this->registerRoutes();
         $this->registerTemplating();
-
+        //$this->registerAssets();
     }
 
 
     protected function registerRoutes() {
         $this->register(new UrlGeneratorServiceProvider());
 
-        $this->get('/wahlomat/{dataSet}/', 'Wahlomat\Controller::index')->value('dataSet','bundestagswahl2009')->bind('wahlomat');
-        $this->get('/wahlomat/{dataSet}/eigen', 'Wahlomat\Controller::eigen')->value('dataSet','bundestagswahl2009')->bind('wahlomat_eigen');
-        $this->get('/wahlomat/{dataSet}/parties/', 'Wahlomat\Controller::parties')->value('dataSet','bundestagswahl2009')->bind('wahlomat_parties');
+        $this->get('/wahlomat/{dataSet}/', 'Wahlomat\Controller::index')->value('dataSet','bundestagswahl2013')->bind('wahlomat');
+        $this->get('/wahlomat/{dataSet}/eigen', 'Wahlomat\Controller::eigen')->value('dataSet','bundestagswahl2013')->bind('wahlomat_eigen');
+        $this->get('/wahlomat/{dataSet}/parties/', 'Wahlomat\Controller::parties')->value('dataSet','bundestagswahl2013')->bind('wahlomat_parties');
         $this->get('/wahlomat/{dataSet}/api/', 'Wahlomat\Controller::json')->bind('wahlomat_api');
-        $this->get('/wahlomat/{dataSet}/cluster/', 'Wahlomat\Controller::cluster')->value('dataSet','bundestagswahl2009')->bind('wahlomat_cluster');
+        $this->get('/meta/impressum/', 'Wahlomat\StaticController::imprint')->bind('imprint');
 
     }
 
@@ -61,11 +62,18 @@ class Application extends BaseApplication {
 
         $app = &$this;
         $this->before(
-            function () use ($app) {
+            function (Request $request) use ($app) {
                 /** @noinspection PhpUndefinedMethodInspection */
                 $app['twig']->addGlobal('layout', $app['twig']->loadTemplate('layout.html.twig'));
+                $app['twig']->addGlobal('route', $request->attributes->get('_route'));
             }
         );
 
+    }
+
+
+    protected function registerAssets() {
+        $this->register(new AsseticServiceProvider());
+        $this['assetic.path_to_web'] = BASE_DIR.'/web/assets/';
     }
 }

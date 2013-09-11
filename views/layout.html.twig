@@ -6,17 +6,19 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>{{ block('title') }}</title>
+    <title>{{ block('title') }}  -  ℚuantikative</title>
 
+    {% block style %}
     <link href="{{ app.request.baseUrl }}/css/bootstrap.css" rel="stylesheet">
     <link href="{{ app.request.baseUrl }}/css/chart.css" rel="stylesheet">
     <link href="{{ app.request.baseUrl }}/css/layout.css" rel="stylesheet">
-
+    {% endblock %}
+    {% block head_js %}
     <!--[if lt IE 9]>
     <script src="{{ app.request.baseUrl }}/js/vendor/html5shiv.js"></script>
     <script src="{{ app.request.baseUrl }}/js/vendor/respond.min.js"></script>
     <![endif]-->
-
+    {% endblock %}
 </head>
 <body>
 
@@ -27,12 +29,18 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#">Quantikative</a>
+        <a class="navbar-brand" href="{{ path('wahlomat') }}">Quantikative</a>
         <div class="nav-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li class="dropdown {{ route in ['wahlomat', 'wahlomat_parties', 'wahlomat_eigen']  ? 'active' : '' }}">
+                    <a id="drop1" href="{{ path('wahlomat') }}" role="button" class="dropdown-toggle" data-toggle="dropdown">Wahlomat 2013 <b class="caret"></b></a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
+                        <li class="{{ route in ['wahlomat']  ? 'active' : '' }}" role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('wahlomat') }}">Aussagen</a></li>
+                        <li class="{{ route in ['wahlomat_parties']  ? 'active' : '' }}"role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('wahlomat_parties') }}">Ähnlichkeiten</a></li>
+                        <!--<li role="presentation" class="divider"></li>-->
+                    </ul>
+                </li>
+                <li class="{{ route == 'imprint' ? active : '' }}"><a href="{{ path('imprint') }}">Impressum</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>
@@ -48,13 +56,9 @@
 
 </div><!-- /container -->
 
-
-<!-- JS and analytics only. -->
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="{{ app.request.baseUrl }}/js/vendor/jquery.js"></script>
-<script src="{{ app.request.baseUrl }}/js/vendor/bootstrap.js"></script>
-
+{% block footer_js %}
+    <script src="{{ app.request.baseUrl }}/js/vendor/jquery.js"></script>
+    <script src="{{ app.request.baseUrl }}/js/vendor/bootstrap.js"></script>
+{% endblock %}
 </body>
 </html>

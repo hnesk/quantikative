@@ -1,90 +1,43 @@
 {% extends layout %}
-{% block title %}Index{% endblock %}
-{% block content %}
+{% block title %}Wahlomat-Aussagen der Parteien im Vergleich{% endblock %}
+{% block style%}
+    {{ parent() }}
+    <link href="{{ app.request.baseUrl }}/css/matrixTable.css" rel="stylesheet">
     <style type="text/css">
-        table.matrix {
-            border-collapse: separate;
-            /* border-spacing: 2px; */
-        }
-
-        table.matrix td {
-            font-size: 10px;
-            font-family: "Ubuntu Mono",monospace;
-            width:25px;
-            height:25px;
-            text-align: right;
-            padding-right:4px;
-            border:1px solid #efeff8;
-            border-radius: 1px;
-        }
-
-        table.matrix th {
-            white-space: nowrap;
-            font-size:10px;
-            padding:5px;
-            background-color:#efeff8;
-        }
-
-        table.matrix thead th {
-            width:25px;
-            height:200px;
+        #parties {
             position: relative;
         }
 
-        table.matrix tbody th {
-            text-align: right;
+        .party-popover {
+            max-width: 600px;
+            width: 600px;
+            display: block;
+            top:-200px;
+            left:-200px;
+            opacity: 0;
         }
-
-        table.matrix thead th span {
-            position: absolute;
-            top:-5px;
-            left:8px;
-            width: 200px;
-            height: 200px;
-            transform: rotate(-90deg);
-            -moz-transform: rotate(-90deg);
-            -webkit-transform: rotate(-90deg);
-        }
-
-        .popover {
-            max-width: 400px;
-        }
-
     </style>
+{% endblock %}
+
+{% block content %}
     <div id="wahlomat" class="clearfix">
         <div id="parties" class="chart viewWahlomat">
-            <h3>Aussagen der Parteien</h3>
+            <h3>Aussagen der Parteien in der Übersicht</h3>
         </div>
     </div>
-    <script src="{{ app.request.baseUrl }}/js/vendor/d3.v3.js"></script>
-    <script src="{{ app.request.baseUrl }}/js/vendor/jquery.js"></script>
-    <script src="{{ app.request.baseUrl }}/js/vendor/bootstrap.js"></script>
-    <script src="{{ app.request.baseUrl }}/js/util.js"></script>
-    <script src="{{ app.request.baseUrl }}/js/compareMatrix.js"></script>
+{% endblock %}
+
+{% block footer_js %}
+    {{ parent() }}
     <script>
         var data = {
             tdm : {{ tdm|json_encode|raw }},
             reasonMatrix: {{ reasonMatrix|json_encode|raw }}
         };
     </script>
-    <script>
-        partyMatrix.init(
-                d3.select('#parties'),
-                data.tdm.values,
-                data.tdm.documents,
-                data.tdm.terms
-        );
-
-
-        partyMatrix.dispatcher.on('selected', function(i,j) {
-            $('body').popover({
-                'content':data.reasonMatrix.values[i][j][0]
-            }).popover('show');
-        });
-        partyMatrix.dispatcher.on('unselected', function(i,j) {
-            $(this).popover('hide');
-        });
-
-
-    </script>
+    <script src="{{ app.request.baseUrl }}/js/vendor/d3.v3.js"></script>
+    <script src="{{ app.request.baseUrl }}/js/util.js"></script>
+    <script src="{{ app.request.baseUrl }}/js/compareMatrix.js"></script>
+    <script src="{{ app.request.baseUrl }}/js/floatBox.js"></script>
+    <script src="{{ app.request.baseUrl }}/js/view.partyview.js"></script>
 {% endblock %}

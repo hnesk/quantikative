@@ -1,0 +1,44 @@
+table.matrix {
+    border-collapse: separate;
+}
+
+table.matrix td {
+    font-size: 10px;
+    font-family: "Ubuntu Mono",monospace;
+    width:30px;
+    height:30px;
+    text-align: right;
+    padding-right:4px;
+
+    border-width:1px;
+    border-style: solid;
+    border-color:rgb(239,239,248);
+    border-radius: 1px;
+}
+
+table.matrix th {
+    font-size:10px;
+    padding:5px;
+    background-color:rgb(239,239,248);
+}
+
+table.matrix thead th {
+    width:30px;
+    height:60px;
+    position: relative;
+}
+
+table.matrix tbody th {
+    text-align: right;
+    white-space: nowrap;
+}
+
+table.matrix thead th span {
+    position: absolute;
+    width: 30px;
+    height: 23px;
+
+    transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+}
