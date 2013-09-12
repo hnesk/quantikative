@@ -71,8 +71,8 @@ class Controller {
 
     public function parties($dataSet, Request $request, Application $app) {
         $tdm = $this->getMatrix($dataSet);
-        $tdm = $tdm->filterDocuments(ArrayFilter::create('0,1,2,3,4,5,6,7,8,9,10,20,27')->toClosure());
-        //$tdm = $this->clusterMatrix($tdm);
+        //$tdm = $tdm->filterDocuments(ArrayFilter::create('0,1,2,3,4,5,6,7,8,9,10,20,27')->toClosure());
+        $tdm = $this->clusterMatrix($tdm);
         $ddm = $tdm->calculateDocumentMatrix();
 
         return $app->render(

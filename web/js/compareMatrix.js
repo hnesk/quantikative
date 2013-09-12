@@ -9,14 +9,19 @@ var partyMatrix = {
         .domain([-1, 0, 1])
         .range(['#000000', '#cccccc', '#000000']),
 
-
     tableHighlight : function(table, color, cursorColor) {
         return function(d,i) {
             var column = i;
             var row = this.parentNode.dataset.index;
-            table.selectAll('tr.row-'+row+' td.item, td.item.column-'+column).transition().style('border-color',color);
-            table.selectAll('tr.row-'+row+' th, th.column-'+column).transition().style('background-color',color);
-            table.selectAll('tr.row-'+row+' td.item.column-'+column).transition().style('border-color',cursorColor);
+            if (/Firefox/.test(navigator.userAgent)) {
+                table.selectAll('tr.row-'+row+' td.item, td.item.column-'+column).style('border-color',color);
+                table.selectAll('tr.row-'+row+' th, th.column-'+column).style('background-color',color);
+                table.selectAll('tr.row-'+row+' td.item.column-'+column).style('border-color',cursorColor);
+            } else {
+                table.selectAll('tr.row-'+row+' td.item, td.item.column-'+column).transition().style('border-color',color);
+                table.selectAll('tr.row-'+row+' th, th.column-'+column).transition().style('background-color',color);
+                table.selectAll('tr.row-'+row+' td.item.column-'+column).transition().style('border-color',cursorColor);
+            }
         }
     },
 
@@ -24,9 +29,7 @@ var partyMatrix = {
     cursorHighlightColor : '#333333',
     tableDefaultColor : '#efeff8',
 
-
     dispatcher : null,
-
 
     init : function (rootSelection, values, columnData, rowData, additional) {
 
@@ -48,13 +51,9 @@ var partyMatrix = {
 
         function buildCell(selection) {
             selection
-                .each(function (d,i) {
-                    this.dataset.reason = additional[this.parentNode.dataset.index][i];
-                })
                 .attr('title',function (d,i) {return columnData[i].short + ' zu "' + rowData[this.parentNode.dataset.index].short+'"';})
                 .attr('class',function (d,i) {return 'item column-'+i ;})
                 .style('background-color', this.colors)
-                .style('color', this.colorsText)
                 .on('mouseover' , highlightOn)
                 .on('click' , function(d,i) {
                     self.dispatcher.selected.apply(this, [this.parentNode.dataset.index, i]);
@@ -63,9 +62,29 @@ var partyMatrix = {
                 .on('mouseout' , function(d,i) {
                     self.dispatcher.unselected.apply(this, [this.parentNode.dataset.index, i]);
                     highlightOff.apply(this, [d,i]);
-                })
-                .text(function (d) {return (d > 0 ? '+' : (d < 0 ? '-' : '~'));})
-            ;
+                });
+
+
+            selection
+                .append('span')
+                .style('color', this.colorsText)
+                .text(function (d) {return (d > 0 ? '+' : (d < 0 ? '-' : '~'))});
+
+            selection
+                .append('div')
+                .each(function (d,i) {this.dataset.textlength = additional[this.parentNode.parentNode.dataset.index][i][0].length / 500; })
+                .attr('class','textIndicator')
+                .text(function() {return this.dataset.textlength > 0 ? new Array(2+parseInt(this.dataset.textlength*3)).join('"') : '';});
+            /*
+             .style({
+             width: function (d,i) {
+             return (this.dataset.textlength > 0 ? Math.max(12,this.dataset.textlength * 100) : 0)+'%';}
+             }
+             )
+             */
+
+
+            return selection;
         }
 
 
@@ -97,4 +116,4 @@ var partyMatrix = {
                     .text(util.access('short'))
                     .attr('title', util.access('long'));
     }
-};
+}

@@ -36,11 +36,13 @@
                     <a id="drop1" href="{{ path('wahlomat') }}" role="button" class="dropdown-toggle" data-toggle="dropdown">Wahlomat 2013 <b class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
                         <li class="{{ route in ['wahlomat']  ? 'active' : '' }}" role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('wahlomat') }}">Aussagen</a></li>
+                        {#
                         <li class="{{ route in ['wahlomat_parties']  ? 'active' : '' }}"role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('wahlomat_parties') }}">Ähnlichkeiten</a></li>
                         <!--<li role="presentation" class="divider"></li>-->
+                        #}
                     </ul>
                 </li>
-                <li class="{{ route == 'imprint' ? active : '' }}"><a href="{{ path('imprint') }}">Impressum</a></li>
+                <li class="{{ route == 'imprint' ? 'active' : '' }}"><a href="{{ path('imprint') }}">Impressum</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>

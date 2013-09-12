@@ -30,7 +30,7 @@ var floatBox = {
         myHeight = this.box.property('offsetHeight');
 
         newX = x + myWidth > this.root.property('offsetWidth') ? x - myWidth - 0 : x + 35;
-        newY = y + myHeight + 35 > Math.min(this.root.property('offsetHeight'), window.innerHeight) && y - myHeight > window.scrollY ? y - myHeight + 35 : y + 70
+        newY = y + myHeight + 35 > Math.min(this.root.property('offsetHeight'), window.innerHeight) && y - myHeight > window.scrollY ? y - myHeight : y + 35
 
         this.box.style('opacity',0.8).transition().duration(500).style({'left':newX+'px','top':newY+'px',opacity:0.95});
     },
