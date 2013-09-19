@@ -10,7 +10,10 @@ var similarityMatrix = {
 
     colors : d3.scale.linear()
             .domain([-1, 0, 1])
-            .range(['#ff8800', '#efeff8', '#00A0ff']),
+            //.range(['#F1A340', '#efeff8', '#998EC3']),
+            .range(['#E66101', '#efeff8', '#5E3C99']),
+            //0xE66101; 0xFDB863; 0xF7F7F7; 0xB2ABD2; 0x5E3C99;
+            //.range(['#ff8800', '#efeff8', '#00A0ff']),
 
     colorsText : d3.scale.linear()
         .domain([-1, 0, 1])

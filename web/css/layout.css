@@ -22,6 +22,10 @@ body {
     padding-top: 50px;
 }
 
+h1,h2,h3, .navbar-brand {
+    font-family: Georgia, serif;
+}
+
 .content {
     padding:10px;
     background-color: #efeff8;
@@ -54,4 +58,74 @@ body {
 #wahlomat ul li label input {
     margin:1px 3px 0 0;
     float: left;
+}
+
+
+#wahlomat img.preview {
+
+    box-shadow: 1px 1px 3px #999;
+    -moz-box-shadow: 1px 1px 3px #999
+}
+
+#wahlomat img.preview.pull-right {
+    margin:0 0 10px 20px;
+}
+
+#wahlomat img.preview.pull-left {
+    margin:0 20px 10px 0;
+}
+
+#footer {
+    height: 60px;
+    background-color: #000;
+}
+
+#footer .container {
+    width: auto;
+    padding: 0 15px;
+}
+
+.container .credit {
+    margin: 20px 0;
+}
+#disqus_thread {
+    margin:0px 10px;
+}
+
+#wahlomat {
+    margin:0px 10px;
+}
+
+.text-muted {
+    color: #999999;
+}
+
+
+.legend {
+    margin-top:10px;
+}
+
+table.legend {
+    width: 200px;
+    float: left;
+}
+table.legend caption {
+    text-align: right;
+}
+
+
+.popover-content h3 {
+    margin-top:0px;
+}
+
+.party-popover {
+    max-width: 700px;
+    width: 700px;
+    display: block;
+    top:-200px;
+    left:-200px;
+    opacity: 0;
+}
+.party-popover .close {
+    padding:5px 10px;
 }

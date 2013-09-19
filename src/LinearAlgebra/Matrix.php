@@ -637,10 +637,13 @@ class Matrix implements \ArrayAccess, \Countable, \Iterator, \JsonSerializable {
         return $this->reduce(function ($r, $a) {return $a < $r ? $a : $r;}, INF);
     }
 
-
-
-
     public function toObject() {
+        return $this->values;
+    }
+
+
+
+    public function toArray() {
         return $this->values;
     }
 

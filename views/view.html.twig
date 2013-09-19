@@ -22,23 +22,88 @@
             float: right;
         }
 
-
         .party-popover {
             max-width: 400px;
             width: 400px;
-            display: block;
-            top:-200px;
-            left:-200px;
-            opacity: 0;
+        }
+
+        #wahlomat {
+            width: 1090px;
         }
     </style>
 {% endblock %}
 
 {% block content %}
     <div id="wahlomat" class="clearfix">
+        <a data-toggle="modal" href="#myModal" class="pull-right btn btn-primary glyphicon glyphicon-info-sign"></a>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Parteien und Thesenübersicht</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Der Wahlomat setzt eher auf ein spielerisches Herangehen an die Parteien, so muss man sich die Parteien, die man mit seiner eigenen Position vergleichen will, erst aussuchen, maximal kann man 8 Parteien miteinander vergleichen und die detaillierten Antworten der Parteien sind immer einige Klicks entfernt. </p>
+                        <p>Als spielerische politische Positionsfindung ist das eine gute Idee, zur Beantwortung der Frage, wie die Parteienlandschaft beschaffen ist, aber eher ungeeignet.</p>
+                        <p>Die erste Visualisierung ist eine Aufnahme aus der Totale, sämtliche Antworten sind einsehbar, per Klick auf den Schnittpunkt zwischen Partei und These kann man die Detailantwort lesen.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Schliessen</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
         <div id="parties" class="chart viewWahlomat">
             <h3>Aussagen der Parteien in der Übersicht</h3>
         </div>
+        <div class="legend pull-right">
+            <table class="legend matrix partyMatrix">
+                <caption>Legende der Farben</caption>
+                <tbody>
+                <tr>
+                    <th>Ablehnung</th>
+                    <td class="item column-0" style="background-color: rgb(255, 136, 0);"><span style="color: rgb(0, 0, 0);">-</span><div class="textIndicator"></div></td>
+                </tr>
+                <tr>
+                    <th>Enthaltung</th>
+                    <td class="item column-0" style="background-color: rgb(239, 239, 248);"><span style="color: rgb(204, 204, 204);">~</span><div class="textIndicator"></div></td>
+                </tr>
+                <tr>
+                    <th>Zustimmung</th>
+                    <td class="item column-0" style="background-color: rgb(0, 160, 255);"><span style="color: rgb(0, 0, 0);">+</span><div class="textIndicator"></div></td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="legend matrix partyMatrix">
+                <caption>Legende der Textmenge</caption>
+                <tbody>
+                <tr>
+                    <th>kein Detailtext</th>
+                    <td class="item column-0" style="background-color: rgb(0, 160, 255);"><span style="color: rgb(0, 0, 0);">+</span><div class="textIndicator"></div></td>
+                </tr>
+                <tr>
+                    <th>sehr kurzer Detailtext</th>
+                    <td class="item column-0" style="background-color: rgb(0, 160, 255);"><span style="color: rgb(0, 0, 0);">+</span><div class="textIndicator">"</div></td>
+                </tr>
+                <tr>
+                    <th>kurzer Detailtext</th>
+                    <td class="item column-0" style="background-color: rgb(0, 160, 255);"><span style="color: rgb(0, 0, 0);">+</span><div class="textIndicator">""</div></td>
+                </tr>
+                <tr>
+                    <th>langer Detailtext</th>
+                    <td class="item column-0" style="background-color: rgb(0, 160, 255);"><span style="color: rgb(0, 0, 0);">+</span><div class="textIndicator">"""</div></td>
+                </tr>
+                <tr>
+                    <th>sehr langer Detailtext</th>
+                    <td class="item column-0" style="background-color: rgb(0, 160, 255);"><span style="color: rgb(0, 0, 0);">+</span><div class="textIndicator">""""</div></td>
+                </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+
     </div>
 {% endblock %}
 

@@ -39,7 +39,14 @@ class Controller {
         $this->loader = $loader ?: new JavascriptLoader(BASE_DIR.'/data/');
     }
 
-    public function index($dataSet, Request $request, Application $app) {
+    public function index($dataSet, Application $app) {
+        return $app->render(
+            'index.html.twig',
+            array()
+        );
+    }
+
+    public function view($dataSet, Request $request, Application $app) {
         $tdm = $this->getMatrix($dataSet);
         $reasonMatrix = $this->getMatrix($dataSet, LoaderInterface::DATA_TYPE_REASON);
         //$tdm = $tdm->filterDocuments(ArrayFilter::create('0,1,2,3,4,5,6,7,8,9,10,20,27')->toClosure());
@@ -52,6 +59,7 @@ class Controller {
             )
         );
     }
+
 
 
     public function eigen($dataSet, Request $request, Application $app) {

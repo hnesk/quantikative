@@ -1,42 +1,55 @@
 {% extends layout %}
 
-{% block title %}Wahlomat zu - Ähnlichkeiten der Parteien{% endblock %}
+{% block title %}Wahlomat - Ähnlichkeiten der Parteien{% endblock %}
 
 {% block style %}
     {{ parent() }}
     <link href="{{ app.request.baseUrl }}/css/matrixTable.css" rel="stylesheet">
     <style type="text/css">
 
-        table.thesisTable {
-            border-collapse: collapse;
-            border:1px hidden #efeff8;
-            width: 480px;
+        #wahlomat {
+            width:1010px;
         }
 
-        table.thesisTable th.partyhead {
-            width:70px;
-        }
-
-        table.thesisTable th.partyhead-0, table.thesisTable td.party-0 {
-            text-align: right;
-        }
-
-        table.thesisTable td, table.thesisTable th {
-
-            border:1px solid #ccc;
-            border-radius: 2px;
-            font-size:12px;
-            padding:1px 5px;
-        }
-
-        #parties {
-            width: 480px;
+        .party-popover .matches, .party-popover .nonmatches {
+            width:320px;
             float: left;
         }
 
-        #terms {
-            width: 480px;
+
+        ul.thesisCloud {
+            margin:0;
+            padding:0 30px 10px 0;
+        }
+
+        ul.thesisCloud li.party-head strong.party-head-1 {
             float: right;
+        }
+
+        ul.thesisCloud li {
+            clear: both;
+            border-bottom:1px solid #eee;
+        }
+
+        ul.thesisCloud li:last-child {
+            border-bottom: none;
+        }
+
+        ul.thesisCloud li span.party0, ul.thesisCloud li span.party1 {
+            width:20px;
+            text-align:center;
+            display:block;
+        }
+
+        ul.thesisCloud li span.party0 {
+            float: left;
+        }
+
+        ul.thesisCloud li span.party1 {
+            float: right;
+        }
+        ul.thesisCloud li span.thesis {
+            padding:0px 10px;
         }
 
     </style>
@@ -44,13 +57,68 @@
 
 {% block content %}
 <div id="wahlomat" class="clearfix">
+    <a data-toggle="modal" href="#myModal" class="pull-right btn btn-primary glyphicon glyphicon-info-sign"></a>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Parteien und Thesenübersicht</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Diese Visualisierung zeigt "Ähnlichkeiten" zwischen den Antworten der Parteien an.
+                    </p>
+                    <p>
+                        Als Mass für die Ähnlichkeit wurde die <a href="https://de.wikipedia.org/wiki/Kosinus-%C3%84hnlichkeit">Kosinus-Ähnlichkeit</a> gewählt, d.h. zwei Parteien, die jede Frage gleich beantwortet haben eine Ähnlichkeit von 1 (100% Übereinstimmung der Antworten), zwei Parteien die jede Frage gegenteilig benatworten, haben eine Ähnlichkeit von -1 (100% Ablehnung).
+                        Fragen bei denen sich auch nur eine Partei enthält, werden in dieser Norm nicht berücksichtigt.
+                    </p>
+                    <p>Ein Klick auf die Schnittpunkte zweier Parteien zeigt die Thesen, in denen beide Parteien übereinstimmen, und die Thesen in denen beide voneinander abweichen, aufgeschlüsselt auf.</p>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Schliessen</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
     <div id="parties" class="chart similarityMatrix">
         <h3>Ähnlichkeiten der Parteien untereinander</h3>
     </div>
-    <div id="terms" class="chart thesisTable">
-        <h3>Thesen</h3>
+    <div id="terms" class="hidden"></div>
+    <div class="legend pull-right">
+        <table class="legend matrix partyMatrix">
+            <caption>Legende der Farbwerte</caption>
+            <tbody>
+            <tr>
+                <th>Starke Übereinstimmung</th>
+                <td class="item column-0" style="background-color: rgb(94, 60, 153); color: rgb(0, 0, 0);">1.00</td>
+            </tr>
+            <tr>
+                <th>Schwache Übereinstimmung</th>
+                <td class="item column-0" style="background-color: rgb(166, 149, 200); color: rgb(102, 102, 102); ">0.50</td>
+            </tr>
+            <tr>
+                <th>Weder Übereinstimmung noch Widersprüche</th>
+                <td class="item column-0" style="background-color: rgb(239, 239, 248); color: rgb(204, 204, 204);">0.00</td>
+            </tr>
+            <tr>
+                <th>Schwache Widersprüche</th>
+                <td class="item column-0" style="background-color: rgb(235, 171, 129); color: rgb(106, 106, 106);">-0.29</td>
+            </tr>
+            <tr>
+                <th>Starke Widersprüche</th>
+                <td class="item column-0" style="background-color: rgb(230, 98, 2); color: rgb(1, 1, 1);">-0.59</td>
+            </tr>
+
+            </tbody>
+        </table>
     </div>
+
 </div>
+
 {% endblock %}
 
 
@@ -60,6 +128,7 @@
 <script src="{{ app.request.baseUrl }}/js/util.js"></script>
 <script src="{{ app.request.baseUrl }}/js/similarityMatrix.js"></script>
 <script src="{{ app.request.baseUrl }}/js/thesisTable.js"></script>
+<script src="{{ app.request.baseUrl }}/js/floatBox.js"></script>
 <script src="{{ app.request.baseUrl }}/js/thesisCloud.js"></script>
 <script>
     var data = {
@@ -78,6 +147,8 @@
             data.partySimilarityMatrix.documents
     );
 
+    floatBox.init(d3.select('#parties'));
+
     thesisCloud.init(
             d3.select('#terms'),
             data.theses,
@@ -85,7 +156,29 @@
             data.partySimilarityMatrix.documents
     );
 
-    similarityMatrix.dispatcher.on('selected', thesisCloud.select.bind(thesisCloud));
+    similarityMatrix.dispatcher.on('selected', function (party0Index, party0, party1Index, party1) {
+        var headline = '<strong>' + party0.short + '</strong> vs. <strong>' + party1.short + '</strong>',
+            partyHead = '<li class="party-head"><strong class="party-head-0">' + party0.short + '</strong><strong class="party-head-1">' + party1.short + '</strong></li>',
+            text = ''
+        ;
+
+        thesisCloud.select(party0Index, party0, party1Index, party1);
+        text = '<div class="matches"><h3>Übereinstimmungen</h3>' +
+                '<ul class="thesisCloud">' + partyHead +  thesisCloud.matchList.html() + '</ul></div>' +
+
+                '<div class="nonmatches"><h3>Widersprüche</h3>' +
+                '<ul class="thesisCloud">' + partyHead + thesisCloud.nonMatchList.html()+'</ul></div>'
+        ;
+
+
+        floatBox.set(
+                this.offsetLeft,
+                this.offsetTop,
+                headline,
+                '',
+                text
+        );
+    });
 
 
 </script>

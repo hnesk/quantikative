@@ -19,6 +19,7 @@ use SilexAssetic\AsseticServiceProvider;
 class Application extends BaseApplication {
 
     use BaseApplication\TwigTrait;
+    use BaseApplication\UrlGeneratorTrait;
 
     public function __construct(array $values = array()) {
         parent::__construct($values);
@@ -31,12 +32,13 @@ class Application extends BaseApplication {
 
     protected function registerRoutes() {
         $this->register(new UrlGeneratorServiceProvider());
-
+        $this->get('/', 'Wahlomat\StaticController::index')->bind('index');
         $this->get('/wahlomat/{dataSet}/', 'Wahlomat\Controller::index')->value('dataSet','bundestagswahl2013')->bind('wahlomat');
-        $this->get('/wahlomat/{dataSet}/eigen', 'Wahlomat\Controller::eigen')->value('dataSet','bundestagswahl2013')->bind('wahlomat_eigen');
+        $this->get('/wahlomat/{dataSet}/index/', 'Wahlomat\Controller::view')->value('dataSet','bundestagswahl2013')->bind('wahlomat_view');
+        $this->get('/wahlomat/{dataSet}/eigen/', 'Wahlomat\Controller::eigen')->value('dataSet','bundestagswahl2013')->bind('wahlomat_eigen');
         $this->get('/wahlomat/{dataSet}/parties/', 'Wahlomat\Controller::parties')->value('dataSet','bundestagswahl2013')->bind('wahlomat_parties');
         $this->get('/wahlomat/{dataSet}/api/', 'Wahlomat\Controller::json')->bind('wahlomat_api');
-        $this->get('/meta/impressum/', 'Wahlomat\StaticController::imprint')->bind('imprint');
+        $this->get('/meta/kontakt/', 'Wahlomat\StaticController::imprint')->bind('imprint');
 
     }
 

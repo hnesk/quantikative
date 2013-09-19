@@ -8,7 +8,6 @@ var partyMatrix = {
     colorsText : d3.scale.linear()
         .domain([-1, 0, 1])
         .range(['#000000', '#cccccc', '#000000']),
-
     tableHighlight : function(table, color, cursorColor) {
         return function(d,i) {
             var column = i;
@@ -68,20 +67,13 @@ var partyMatrix = {
             selection
                 .append('span')
                 .style('color', this.colorsText)
-                .text(function (d) {return (d > 0 ? '+' : (d < 0 ? '-' : '~'))});
+                .text(util.showSign);
 
             selection
                 .append('div')
                 .each(function (d,i) {this.dataset.textlength = additional[this.parentNode.parentNode.dataset.index][i][0].length / 500; })
                 .attr('class','textIndicator')
-                .text(function() {return this.dataset.textlength > 0 ? new Array(2+parseInt(this.dataset.textlength*3)).join('"') : '';});
-            /*
-             .style({
-             width: function (d,i) {
-             return (this.dataset.textlength > 0 ? Math.max(12,this.dataset.textlength * 100) : 0)+'%';}
-             }
-             )
-             */
+                .text(function() {return this.dataset.textlength > 0 ? util.repeat('"',1 + this.dataset.textlength*3) : '';});
 
 
             return selection;
