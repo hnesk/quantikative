@@ -69,6 +69,7 @@ class Application extends BaseApplication {
                 /** @noinspection PhpUndefinedMethodInspection */
                 $app['twig']->addGlobal('layout', $app['twig']->loadTemplate('layout.html.twig'));
                 $app['twig']->addGlobal('route', $request->attributes->get('_route'));
+                $app['twig']->addGlobal('base', $request->getBaseUrl());
             }
         );
 

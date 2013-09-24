@@ -9,14 +9,14 @@
     <title>{{ block('title') }}  -  ℚuantikative</title>
 
     {% block style %}
-    <link href="{{ app.request.baseUrl }}/css/bootstrap.css" rel="stylesheet">
-    <link href="{{ app.request.baseUrl }}/css/chart.css" rel="stylesheet">
-    <link href="{{ app.request.baseUrl }}/css/layout.css" rel="stylesheet">
+    <link href="{{base}}/css/bootstrap.css" rel="stylesheet">
+    <link href="{{base}}/css/chart.css" rel="stylesheet">
+    <link href="{{base}}/css/layout.css" rel="stylesheet">
     {% endblock %}
     {% block head_js %}
     <!--[if lt IE 9]>
-    <script src="{{ app.request.baseUrl }}/js/vendor/html5shiv.js"></script>
-    <script src="{{ app.request.baseUrl }}/js/vendor/respond.min.js"></script>
+    <script src="{{base}}/js/vendor/html5shiv.js"></script>
+    <script src="{{base}}/js/vendor/respond.min.js"></script>
     <![endif]-->
     {% endblock %}
 </head>
@@ -82,8 +82,8 @@
     </div>
 </div>
 {% block footer_js %}
-    <script src="{{ app.request.baseUrl }}/js/vendor/jquery.js"></script>
-    <script src="{{ app.request.baseUrl }}/js/vendor/bootstrap.js"></script>
+    <script src="{{base}}/js/vendor/jquery.js"></script>
+    <script src="{{base}}/js/vendor/bootstrap.js"></script>
 
 {% endblock %}
 <!-- Piwik -->

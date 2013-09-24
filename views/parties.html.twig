@@ -4,7 +4,7 @@
 
 {% block style %}
     {{ parent() }}
-    <link href="{{ app.request.baseUrl }}/css/matrixTable.css" rel="stylesheet">
+    <link href="{{base}}/css/matrixTable.css" rel="stylesheet">
     <style type="text/css">
 
         #wahlomat {
@@ -124,12 +124,12 @@
 
 {% block footer_js %}
 {{ parent() }}
-<script src="{{ app.request.baseUrl }}/js/vendor/d3.v3.js"></script>
-<script src="{{ app.request.baseUrl }}/js/util.js"></script>
-<script src="{{ app.request.baseUrl }}/js/similarityMatrix.js"></script>
-<script src="{{ app.request.baseUrl }}/js/thesisTable.js"></script>
-<script src="{{ app.request.baseUrl }}/js/floatBox.js"></script>
-<script src="{{ app.request.baseUrl }}/js/thesisCloud.js"></script>
+<script src="{{base}}/js/vendor/d3.v3.js"></script>
+<script src="{{base}}/js/util.js"></script>
+<script src="{{base}}/js/similarityMatrix.js"></script>
+<script src="{{base}}/js/thesisTable.js"></script>
+<script src="{{base}}/js/floatBox.js"></script>
+<script src="{{base}}/js/thesisCloud.js"></script>
 <script>
     var data = {
         partySimilarityMatrix : {{ ddm|json_encode|raw }},

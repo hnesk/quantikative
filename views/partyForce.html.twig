@@ -4,7 +4,7 @@
 
 {% block style %}
     {{ parent() }}
-    <link href="{{ app.request.baseUrl }}/css/matrixTable.css" rel="stylesheet">
+    <link href="{{base}}/css/matrixTable.css" rel="stylesheet">
     <style type="text/css">
 
         .link {
@@ -30,9 +30,9 @@
 
 {% block footer_js %}
 {{ parent() }}
-<script src="{{ app.request.baseUrl }}/js/vendor/d3.v3.js"></script>
-<script src="{{ app.request.baseUrl }}/js/util.js"></script>
-<script src="{{ app.request.baseUrl }}/js/forceGraph.js"></script>
+<script src="{{base}}/js/vendor/d3.v3.js"></script>
+<script src="{{base}}/js/util.js"></script>
+<script src="{{base}}/js/forceGraph.js"></script>
 <script>
     var data = {
         nodes : {{ ddm.documents|json_encode|raw }},
