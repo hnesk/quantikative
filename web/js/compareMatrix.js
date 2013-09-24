@@ -64,6 +64,7 @@ var partyMatrix = {
                 });
 
 
+
             selection
                 .append('span')
                 .style('color', this.colorsText)

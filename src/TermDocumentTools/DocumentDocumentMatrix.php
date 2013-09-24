@@ -34,6 +34,26 @@ class DocumentDocumentMatrix extends LabeledMatrix {
     }
 
 
+    /**
+     * @return array
+     */
+    public function toLinkList() {
+        $result = array();
+        for ($i=0; $i < $this->values->m(); $i++) {
+            for ($j= $i+1; $j < $this->values->n(); $j++) {
+                $v = $this->values->index($i,$j);
+                if (abs($v) > 0.0) {
+                    $result[] = (object)array(
+                        'source' => $j,
+                        'target' => $i,
+                        'similarity' => $v
+                    );
+                }
+            }
+        }
+        return $result;
+
+    }
 
     /**
      * @return object

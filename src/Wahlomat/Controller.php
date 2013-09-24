@@ -89,11 +89,24 @@ class Controller {
                 'ddm' => $ddm,
                 'terms' => $tdm->getTerms(),
                 'answers' => $tdm->getValues(),
-                'plain' => $ddm->toCSV()
             )
         );
     }
 
+    public function partyForce($dataSet, Request $request, Application $app) {
+        $tdm = $this->getMatrix($dataSet);
+        //$tdm = $tdm->filterDocuments(ArrayFilter::create('0,1,2,3,4,5,6,20')->toClosure());
+        //$tdm = $this->clusterMatrix($tdm);
+        $ddm = $tdm->calculateDocumentMatrix();
+
+
+        return $app->render(
+            'partyForce.html.twig',
+            array(
+                'ddm' => $ddm
+            )
+        );
+    }
 
 
 

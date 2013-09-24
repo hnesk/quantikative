@@ -58,15 +58,14 @@
     {% endblock %}
     <div id="disqus_thread"></div>
     <script type="text/javascript">
-        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-        var disqus_shortname = 'quantikative'; // required: replace example with your forum shortname
-
-        /* * * DON'T EDIT BELOW THIS LINE * * */
-        (function() {
-            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        })();
+        var disqus_shortname = 'quantikative';
+        if (!window.location.host.match(/localhost/)) {
+            (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        }
     </script>
     <noscript>Bitte aktiviere JavaScript für die <a href="http://disqus.com/?ref_noscript">Disqus-Kommentare</a></noscript>
     <a href="http://disqus.com" class="dsq-brlink">Kommentare powered by <span class="logo-disqus">Disqus</span></a>
@@ -77,7 +76,7 @@
     <div class="container">
         <p class="text-muted credit">
             <a href="http://creativecommons.org/licenses/by-sa/3.0/">&copy; {{  "now" | date('Y') }} CC-BY-SA</a> |
-            Mit <a href="http://colorbrewer2.org/">vielen Farben</a>, <a href="http://d3js.org/">d3.js</a>, <a href="http://getbootstrap.com/">bootstrap</a>, <a href="http://php.net/">php</a> und Spass gemacht von <a href="https://twitter.com/hnesk">@hnesk</a> |
+            Mit <a href="http://colorbrewer2.org/">vielen Farben</a>, <a href="http://d3js.org/">d3.js</a>, <a href="http://getbootstrap.com/">bootstrap</a> und <a href="http://silex.sensiolabs.org/">silex</a> gebaut von <a href="https://twitter.com/hnesk">@hnesk</a> |
             Code und Daten gibt es auf <a href="https://github.com/hnesk/quantikative">github</a>
         </p>
     </div>

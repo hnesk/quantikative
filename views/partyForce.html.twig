@@ -1,0 +1,49 @@
+{% extends layout %}
+
+{% block title %}Wahlomat - Ähnlichkeiten der Parteien{% endblock %}
+
+{% block style %}
+    {{ parent() }}
+    <link href="{{ app.request.baseUrl }}/css/matrixTable.css" rel="stylesheet">
+    <style type="text/css">
+
+        .link {
+            stroke: #f0f0f0;
+        }
+
+
+        #wahlomat {
+        }
+
+    </style>
+{% endblock %}
+
+{% block content %}
+<div id="wahlomat" class="clearfix">
+
+    <div id="force" class="chart">
+
+    </div>
+</div>
+{% endblock %}
+
+
+{% block footer_js %}
+{{ parent() }}
+<script src="{{ app.request.baseUrl }}/js/vendor/d3.v3.js"></script>
+<script src="{{ app.request.baseUrl }}/js/util.js"></script>
+<script src="{{ app.request.baseUrl }}/js/forceGraph.js"></script>
+<script>
+    var data = {
+        nodes : {{ ddm.documents|json_encode|raw }},
+        links : {{ ddm.toLinkList()|json_encode|raw }},
+    };
+
+</script>
+<script>
+
+
+forceGraph(d3.select('#force'), data);
+
+</script>
+{% endblock %}

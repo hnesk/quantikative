@@ -37,6 +37,7 @@ class Application extends BaseApplication {
         $this->get('/wahlomat/{dataSet}/index/', 'Wahlomat\Controller::view')->value('dataSet','bundestagswahl2013')->bind('wahlomat_view');
         $this->get('/wahlomat/{dataSet}/eigen/', 'Wahlomat\Controller::eigen')->value('dataSet','bundestagswahl2013')->bind('wahlomat_eigen');
         $this->get('/wahlomat/{dataSet}/parties/', 'Wahlomat\Controller::parties')->value('dataSet','bundestagswahl2013')->bind('wahlomat_parties');
+        $this->get('/wahlomat/{dataSet}/partyForce/', 'Wahlomat\Controller::partyForce')->value('dataSet','bundestagswahl2013')->bind('wahlomat_partyForce');
         $this->get('/wahlomat/{dataSet}/api/', 'Wahlomat\Controller::json')->bind('wahlomat_api');
         $this->get('/meta/kontakt/', 'Wahlomat\StaticController::imprint')->bind('imprint');
 

@@ -5,17 +5,21 @@
  * Time: 20:00
  * To change this template use File | Settings | File Templates.
  */
-function scatterPlot() {
+function 1dPlot() {
     var
         width = 600,
-        height = 600
-    ;
+        height = 600,
+        returnIndex = function (index) {
+            return function (data) {
+                return 1.0*data[index];
+            }
+        };
 
     function chart(selection) {
         selection.each(function(data) {
 
-            var min = Math.min(d3.min(data, util.accessFloat('x')), d3.min(data, util.accessFloat('y')));
-            var max = Math.max(d3.max(data, util.accessFloat('x')), d3.max(data, util.accessFloat('y')));
+            var min = Math.min(d3.min(data, returnIndex('x')), d3.min(data, returnIndex('y')));
+            var max = Math.max(d3.max(data, returnIndex('x')), d3.max(data, returnIndex('y')));
 
             //var min = -0.5;
             //var max = 0.5;
