@@ -8,6 +8,8 @@
 
     <title>{{ block('title') }}  -  ℚuantikative</title>
 
+    <link rel="shortcut icon" href="favicon.ico" />
+
     {% block style %}
     <link href="{{base}}/css/bootstrap.css" rel="stylesheet">
     <link href="{{base}}/css/chart.css" rel="stylesheet">
@@ -29,7 +31,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="{{ path('index') }}">ℚuantikative</a>
+        <a class="navbar-brand" href="{{ path('index') }}">Quantikative</a>
         <div class="nav-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="dropdown {{ route in ['wahlomat', 'wahlomat_view', 'wahlomat_parties', 'wahlomat_eigen']  ? 'active' : '' }}">
