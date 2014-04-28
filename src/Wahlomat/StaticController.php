@@ -18,7 +18,7 @@ use Wahlomat\Model\JavascriptLoader;
 class StaticController {
 
     public function index(Application $app) {
-        return $app->redirect($app->url('wahlomat', array('dataSet' => 'bundestagswahl2013')));
+        return $app->redirect($app->url('wahlomat', array('dataSet' => 'europawahl2014')));
     }
 
     public function imprint(Application $app) {
