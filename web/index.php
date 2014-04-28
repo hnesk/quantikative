@@ -8,6 +8,7 @@
  */
 error_reporting(E_ALL);
 ini_set('display_errors',1);
+date_default_timezone_set('Europe/Berlin');
 
 define('BASE_DIR', realpath(__DIR__.'/..'));
 require_once BASE_DIR.'/vendor/autoload.php';

@@ -34,15 +34,22 @@
         <a class="navbar-brand" href="{{ path('index') }}">Quantikative</a>
         <div class="nav-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="dropdown {{ route in ['wahlomat', 'wahlomat_view', 'wahlomat_parties', 'wahlomat_eigen']  ? 'active' : '' }}">
-                    <a id="drop1" href="{{ path('wahlomat') }}" role="button" class="dropdown-toggle" data-toggle="dropdown">Wahlomat 2013 <b class="caret"></b></a>
+                <li class="dropdown {{ dataSet == 'europawahl2014' ? 'active' : '' }}">
+                    <a id="drop1" href="{{ path('wahlomat') }}" role="button" class="dropdown-toggle" data-toggle="dropdown">Wahlomat EW 2014 <b class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
-                        <li class="{{ route in ['wahlomat']  ? 'active' : '' }}" role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('wahlomat') }}">0. Übersicht?</a></li>
-                        <li class="{{ route in ['wahlomat_view']  ? 'active' : '' }}" role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('wahlomat_view') }}">1. Aussagen</a></li>
-                        <li class="{{ route in ['wahlomat_parties']  ? 'active' : '' }}"role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('wahlomat_parties') }}">2. Ähnlichkeiten</a></li>
-                        {#
-                        <!--<li role="presentation" class="divider"></li>-->
-                        #}
+                        <li class="{{ route in ['wahlomat'] and dataSet == 'europawahl2014' ? 'active' : '' }}" role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('wahlomat', {dataSet:'europawahl2014'}) }}">0. Übersicht?</a></li>
+                        <li class="{{ route in ['wahlomat_view'] and dataSet == 'europawahl2014' ? 'active' : '' }}" role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('wahlomat_view', {dataSet:'europawahl2014'}) }}">1. Aussagen</a></li>
+                        <li class="{{ route in ['wahlomat_parties'] and dataSet == 'europawahl2014' ? 'active' : '' }}" role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('wahlomat_parties', {dataSet:'europawahl2014'}) }}">2. Ähnlichkeiten</a></li>
+                        {# <li class="{{ route in ['wahlomat_eigen'] and dataSet == 'europawahl2014' ? 'active' : '' }}" role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('wahlomat_eigen', {dataSet:'europawahl2014'}) }}">3. Parteienspektrum</a></li> #}
+                    </ul>
+                </li>
+                <li class="dropdown {{ dataSet == 'bundestagswahl2013' ? 'active' : '' }}">
+                    <a id="drop1" href="{{ path('wahlomat') }}" role="button" class="dropdown-toggle" data-toggle="dropdown">Wahlomat BTW 2013<b class="caret"></b></a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
+                        <li class="{{ route in ['wahlomat'] and dataSet == 'bundestagswahl2013' ? 'active' : '' }}" role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('wahlomat', {dataSet:'bundestagswahl2013'}) }}">0. Übersicht?</a></li>
+                        <li class="{{ route in ['wahlomat_view'] and dataSet == 'bundestagswahl2013' ? 'active' : '' }}" role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('wahlomat_view', {dataSet:'bundestagswahl2013'}) }}">1. Aussagen</a></li>
+                        <li class="{{ route in ['wahlomat_parties'] and dataSet == 'bundestagswahl2013' ? 'active' : '' }}" role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('wahlomat_parties', {dataSet:'bundestagswahl2013'}) }}">2. Ähnlichkeiten</a></li>
+                        {# <li class="{{ route in ['wahlomat_eigen'] and dataSet == 'bundestagswahl2013' ? 'active' : '' }}" role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('wahlomat_eigen', {dataSet:'bundestagswahl2013'}) }}">3. Parteienspektrum</a></li> #}
                     </ul>
                 </li>
                 <li class="{{ route == 'imprint' ? 'active' : '' }}"><a href="{{ path('imprint') }}">Kontakt</a></li>

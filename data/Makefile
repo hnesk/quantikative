@@ -11,8 +11,10 @@ bundestagswahl2009:
 bundestagswahl2005:
 	cd bundestagswahl2005 &&  $(MAKE)
 
-europaparlament: europawahl2009 europa2004
+europaparlament: europawahl2009 europawahl2009 europa2004
 
+europawahl2014:
+	cd europawahl2014 &&  $(MAKE)
 europawahl2009:
 	cd europawahl2009 &&  $(MAKE)
 europa2004:

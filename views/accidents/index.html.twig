@@ -1,0 +1,263 @@
+{% extends layout %}
+{% block title %}Visualisierung von Unfällen in Bielefeld{% endblock %}
+
+{% block style %}
+    {{ parent() }}
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.css" />
+    <style type="text/css">
+
+        #accidents {
+            width:1010px;
+        }
+
+        div.chart  {
+            float:left;
+            margin-right:10px;
+        }
+
+        .map {
+            margin-top:21px;
+            clear:both;
+            border: solid 1px #ddd;
+            box-shadow: 0 0 4px rgba(0,0,0,.2);
+        }
+
+        .list {
+            margin-top:21px;
+            clear:both;
+        }
+
+
+
+        .chart g.bar rect {
+            fill: #ccc;
+        }
+
+        .chart g.bar.selected rect{
+            fill: orange;
+        }
+
+    </style>
+{% endblock %}
+
+
+
+{% block content %}
+    <div id="accidents" class="clearfix">
+        <div id="hour-chart" class="chart">
+            <div class="title">Uhrzeit</div>
+        </div>
+        <div id="month-chart" class="chart">
+            <div class="title">Monat</div>
+        </div>
+        <div id="year-chart" class="chart">
+            <div class="title">Jahr</div>
+        </div>
+        <div id="weekday-chart" class="chart">
+            <div class="title">Wochentag</div>
+        </div>
+        <div id="category-chart" class="chart">
+            <div class="title">Typ</div>
+        </div>
+        <div id="code-chart" class="chart">
+            <div class="title">Code</div>
+        </div>
+
+        <div id="list" class="list chart">
+
+        </div>
+        <div id="map" class="map clear">
+
+        </div>
+
+    </div>
+{% endblock %}
+
+
+
+
+{% block footer_js %}
+    {{ parent() }}
+    <script src="{{base}}/js/vendor/d3.v3.js"></script>
+    <script src="{{base}}/js/vendor/crossfilter.js"></script>
+    <script src="{{base}}/js/util.js"></script>
+    <script src="{{base}}/js/d3lib/barChart.js"></script>
+    <script src="{{base}}/js/d3lib/map.js"></script>
+    <script src="{{base}}/js/d3lib/list.js"></script>
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js?2"></script>
+    <script>
+
+    var accident;
+    var weekdays = ['So','Mo','Di','Mi','Do','Fr','Sa','So'];
+    var months = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+    var categories = ['-','Tot','sV','lV','sSs','lSs','Alk','Flu'];
+
+
+    d3.json("{{base}}/data/accidents-2012.json", function(error, accidents) {
+        var index = 0;
+        accidents.forEach(function(d, i) {
+            d.date = new Date(d.date);
+            d.id = index++;
+        });
+
+
+        var accident = crossfilter(accidents);
+            charts = [];
+
+        function rerender() {
+            var i = 0,
+                    chart;
+            for (var i = 0; i < charts.length; i++) {
+                chart = charts[i];
+                d3.select(chart.id).datum(chart.group.all()).call(chart.chart);
+            }
+
+            //console.log(weekDayDimension.top(1));
+            d3.select('#list').datum(yearDimension.top(Infinity)).call(listChart);
+            //d3.select('#map').datum(weekDayDimension.top(Infinity)).call(mapChart);
+        }
+
+
+        function updateDimension(event) {
+            if (event.keys.length > 0) {
+                event.dimension.filterFunction(function (v) {return event.keys.indexOf(v) !== -1;});
+            } else {
+                event.dimension.filterAll();
+            }
+            rerender();
+        }
+
+        /**
+         latDimension = accident.dimension(function (d) { return d.location.lat; });
+         lonDimension = accident.dimension(function (d) { return d.location.lon; });
+         */
+
+        var categoryDimension = accident.dimension(function (d) { return d.category; });
+        var categoryGroup = categoryDimension.group();
+        var categoryChart = d3.lib.barChart()
+                .dimension(categoryDimension)
+                .on('change', updateDimension);
+        categoryChart.xAxis().tickFormat(function (d) {return categories[d];});
+        d3.select('#category-chart').datum(categoryGroup.all()).call(categoryChart);
+
+        charts.push({
+            id: '#category-chart',
+            dimension: categoryDimension,
+            group: categoryGroup,
+            chart: categoryChart
+        });
+
+        var hourDimension = accident.dimension(function (d) { return d.date.getHours() });
+        var hourGroup = hourDimension.group();
+        var hourChart = d3.lib.barChart()
+                .dimension(hourDimension)
+                .width(450)
+                .on('change', updateDimension);
+
+        d3.select('#hour-chart').datum(hourGroup.all()).call(hourChart);
+
+
+        charts.push({
+            id: '#hour-chart',
+            dimension: hourDimension,
+            group: hourGroup,
+            chart: hourChart
+        });
+
+
+
+        var weekDayDimension = accident.dimension(function (dt) {var d = dt.date.getDay(); return  d == 0 ? 7 : d; });
+        var weekDayGroup = weekDayDimension.group();
+        var weekDayChart = d3.lib.barChart();
+        weekDayChart.xAxis().tickFormat(function (d) {return weekdays[d];});
+        weekDayChart
+                .dimension(weekDayDimension)
+                .on('change', updateDimension);
+
+        d3.select('#weekday-chart').datum(weekDayGroup.all()).call(weekDayChart);
+
+        charts.push({
+            id: '#weekday-chart',
+            dimension: weekDayDimension,
+            group: weekDayGroup,
+            chart: weekDayChart
+        });
+
+
+        var monthDimension = accident.dimension(function (d) { return d.date.getMonth(); });
+        var monthGroup = monthDimension.group();
+        var monthChart = d3.lib.barChart()
+                .dimension(monthDimension)
+                .width(450)
+                .on('change', updateDimension);
+        monthChart.xAxis().tickFormat(function (d) {return months[d];});
+        d3.select('#month-chart').datum(monthGroup.all()).call(monthChart);
+
+        charts.push({
+            id: '#month-chart',
+            dimension: monthDimension,
+            group: monthGroup,
+            chart: monthChart
+        });
+
+
+        var yearDimension = accident.dimension(function (d) { return d.date.getUTCFullYear(); });
+        var yearGroup = yearDimension.group();
+        var yearChart = d3.lib.barChart()
+                .dimension(yearDimension)
+                .width(450)
+                .on('change', updateDimension);
+        d3.select('#year-chart').datum(yearGroup.all()).call(yearChart);
+
+        charts.push({
+            id: '#year-chart',
+            dimension: yearDimension,
+            group: yearGroup,
+            chart: yearChart
+        });
+
+        var codeDimension = accident.dimension(function (d) { return Math.floor(d.code / 10); });
+        var codeGroup = codeDimension.group();
+        var codeChart = d3.lib.barChart()
+                .dimension(codeDimension)
+                .width(916)
+                .on('change', updateDimension);
+        d3.select('#code-chart').datum(codeGroup.all()).call(codeChart);
+
+        charts.push({
+            id: '#code-chart',
+            dimension: codeDimension,
+            group: codeGroup,
+            chart: codeChart
+        });
+
+        var listChart = d3.lib.list();
+        d3.select('#list').datum(yearDimension.top(Infinity)).call(listChart);
+
+
+/*
+        var mapChart = d3.lib.map()
+                .width(916)
+                .height(600)
+        ;
+        d3.select('#map').datum(weekDayDimension.top(Infinity)).call(mapChart);
+*/
+
+
+        /*
+
+                var dayDimension = accident.dimension(function (d) { return d.date; });
+                var dayGroup = dayDimension.group(d3.time.day);
+
+                console.log(dayGroup.all());
+
+                var dayChart = d3.lib.barChart().dimension(dayDimension);
+                d3.select('#date-chart').datum(dayGroup.all()).call(dayChart);
+        */
+
+    });
+
+
+
+    </script>
+{% endblock %}

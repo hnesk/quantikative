@@ -1,0 +1,48 @@
+{% extends layout %}
+{% block title %}Index{% endblock %}
+{% block content %}
+<script src="{{base}}/js/vendor/d3.v3.js"></script>
+<script src="{{base}}/js/vendor/d3.svg.transform.js"></script>
+<script src="{{base}}/js/util.js"></script>
+<script src="{{base}}/js/linePlot.js"></script>
+<script type="text/javascript">
+    var plot = linePlot();
+</script>
+<div id="wahlomat">
+    <h2>Feature 1</h2>
+    <div id="feature_0"></div>
+    <script type="text/javascript">
+        d3.select('#feature_0').datum({{ features.0.data|json_encode|raw }}).call(plot);
+    </script>
+
+
+    <h2>Feature 2</h2>
+    <div id="feature_1"></div>
+    <script type="text/javascript">
+        d3.select('#feature_1').datum({{ features.1.data|json_encode|raw }}).call(plot);
+    </script>
+
+
+    <h2>Feature 3</h2>
+    <div id="feature_2"></div>
+    <script type="text/javascript">
+        d3.select('#feature_2').datum({{ features.2.data|json_encode|raw }}).call(plot);
+    </script>
+
+
+    <h2>Feature 4</h2>
+    <div id="feature_3"></div>
+    <script type="text/javascript">
+        d3.select('#feature_3').datum({{ features.3.data|json_encode|raw }}).call(plot);
+    </script>
+
+
+    <h2>Feature 5</h2>
+    <div id="feature_4"></div>
+    <script type="text/javascript">
+        d3.select('#feature_4').datum({{ features.4.data|json_encode|raw }}).call(plot);
+    </script>
+
+</div>
+
+{% endblock %}

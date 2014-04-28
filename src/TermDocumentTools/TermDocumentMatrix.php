@@ -80,7 +80,7 @@ class TermDocumentMatrix extends LabeledMatrix {
     public function calculateFactorMatrix() {
         $f = $this->values->svd()->truncate($this->values->m());
 
-        $features = new Features();
+        $features = new Features($this->getTerms(), $this->getDocuments());
         for ($featureNumber = 0; $featureNumber <  $f->m(); $featureNumber++) {
             $features[$featureNumber] = new Feature(
                 $featureNumber,

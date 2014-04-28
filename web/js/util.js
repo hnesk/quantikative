@@ -25,5 +25,30 @@ var util = {
 
     showSign : function (d) {
         return (d > 0 ? '+' : (d < 0 ? '-' : '~'));
+    },
+    key: function (d) {
+        return d.key;
+    },
+    value: function (d) {
+        return d.value;
+    },
+
+    highlight : function(highlight, what) {
+        what = what || 'fill';
+        baseColor = '';
+        return {
+            on: function(d,i) {
+                baseColor = d3.select(this).style.color;
+                return d3.select(this).transition().style(what, highlight);
+            },
+            off: function(d,i) {
+                return d3.select(this).transition().style(what, baseColor);
+            },
+            toggle: function(v) {
+                return d3.select(this).transition().style(what, v ? highlight : baseColor);
+            }
+        };
     }
+
+
 };

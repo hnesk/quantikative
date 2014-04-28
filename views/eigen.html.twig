@@ -8,17 +8,17 @@
         <!-- <svg .... -->
     </div>
 </div>
-
+<!--
 <ul>
     {% for key, label in dataSets %}
         <li {% if key == dataSet %}class="active"{% endif %}><a href="{{ path('wahlomat', {dataSet:key}) }}">{{ label }}</a></li>
     {% endfor %}
 </ul>
-<script src="{{base}}/js/vendor/d3.v3.js"></script>
-<script src="{{base}}/js/util.js"></script>
-<script src="{{base}}/js/scatterplot.js"></script>
-<script src="{{base}}/js/multiSelect.js"></script>
-<script src="{{base}}/js/wahlomat.js"></script>
+-->
+<script src="{{base}}/js/vendor/d3.v3.js" charset="utf-8"></script>
+<script src="{{base}}/js/util.js" charset="utf-8"></script>
+<script src="{{base}}/js/scatterplot.js" charset="utf-8"></script>
+<script src="{{base}}/js/wahlomat.js" charset="utf-8"></script>
 <script type="text/javascript">
     var wahlomat = new wahlomat('{{ path('wahlomat_api', {dataSet:dataSet}) }}');
 </script>

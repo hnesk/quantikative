@@ -1,0 +1,55 @@
+{% extends layout %}
+{% block title %}Test{% endblock %}
+
+{% block style %}
+    {{ parent() }}
+    <style type="text/css">
+
+
+        div.chart  {
+        }
+
+
+        .chart g.bar rect {
+            fill: #ccc;
+        }
+
+        .chart g.bar.selected rect{
+            fill: orange;
+        }
+
+    </style>
+{% endblock %}
+
+
+
+{% block content %}
+    <div id="test" class="clearfix">
+        <div id="chart" class="chart">
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+{% block footer_js %}
+    {{ parent() }}
+    <script src="{{base}}/js/vendor/d3.v3.js"></script>
+    <script src="{{base}}/js/util.js"></script>
+    <script src="{{base}}/js/d3lib/barChart.js"></script>
+    <script>
+
+
+    d3.json("{{ path('testdata') }}", function(error, accidents) {
+        var index = 0;
+        accidents.forEach(function(d, i) {
+            d.date = new Date(d.date);
+            d.id = index++;
+        });
+    });
+
+
+
+    </script>
+{% endblock %}

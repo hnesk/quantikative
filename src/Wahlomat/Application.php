@@ -31,15 +31,21 @@ class Application extends BaseApplication {
 
 
     protected function registerRoutes() {
+        $defaultDataSet = 'europawahl2014';
         $this->register(new UrlGeneratorServiceProvider());
         $this->get('/', 'Wahlomat\StaticController::index')->bind('index');
-        $this->get('/wahlomat/{dataSet}/', 'Wahlomat\Controller::index')->value('dataSet','bundestagswahl2013')->bind('wahlomat');
-        $this->get('/wahlomat/{dataSet}/index/', 'Wahlomat\Controller::view')->value('dataSet','bundestagswahl2013')->bind('wahlomat_view');
-        $this->get('/wahlomat/{dataSet}/eigen/', 'Wahlomat\Controller::eigen')->value('dataSet','bundestagswahl2013')->bind('wahlomat_eigen');
-        $this->get('/wahlomat/{dataSet}/parties/', 'Wahlomat\Controller::parties')->value('dataSet','bundestagswahl2013')->bind('wahlomat_parties');
-        $this->get('/wahlomat/{dataSet}/partyForce/', 'Wahlomat\Controller::partyForce')->value('dataSet','bundestagswahl2013')->bind('wahlomat_partyForce');
+        $this->get('/wahlomat/{dataSet}/', 'Wahlomat\Controller::index')->value('dataSet',$defaultDataSet)->bind('wahlomat');
+        $this->get('/wahlomat/{dataSet}/index/', 'Wahlomat\Controller::view')->value('dataSet',$defaultDataSet)->bind('wahlomat_view');
+        $this->get('/wahlomat/{dataSet}/eigen/', 'Wahlomat\Controller::eigen')->value('dataSet',$defaultDataSet)->bind('wahlomat_eigen');
+        $this->get('/wahlomat/{dataSet}/parties/', 'Wahlomat\Controller::parties')->value('dataSet',$defaultDataSet)->bind('wahlomat_parties');
+        $this->get('/wahlomat/{dataSet}/partyForce/', 'Wahlomat\Controller::partyForce')->value('dataSet',$defaultDataSet)->bind('wahlomat_partyForce');
         $this->get('/wahlomat/{dataSet}/api/', 'Wahlomat\Controller::json')->bind('wahlomat_api');
+        $this->get('/wahlomat/{dataSet}/spectrum/', 'Wahlomat\Controller::spectrum')->value('dataSet',$defaultDataSet)->bind('wahlomat_spectrum');
         $this->get('/meta/kontakt/', 'Wahlomat\StaticController::imprint')->bind('imprint');
+
+        #$this->get('/unfaelle-bielefeld/', 'Accidents\Controller::index')->bind('accidents');
+        #$this->get('/test/', 'Accidents\Controller::test')->bind('test');
+        #$this->get('/testdata/', 'Accidents\Controller::testData')->bind('testdata');
 
     }
 
@@ -68,7 +74,11 @@ class Application extends BaseApplication {
             function (Request $request) use ($app) {
                 /** @noinspection PhpUndefinedMethodInspection */
                 $app['twig']->addGlobal('layout', $app['twig']->loadTemplate('layout.html.twig'));
+                /** @noinspection PhpUndefinedMethodInspection */
                 $app['twig']->addGlobal('route', $request->attributes->get('_route'));
+                /** @noinspection PhpUndefinedMethodInspection */
+                $app['twig']->addGlobal('dataSet', $request->attributes->get('dataSet'));
+                /** @noinspection PhpUndefinedMethodInspection */
                 $app['twig']->addGlobal('base', $request->getBaseUrl());
             }
         );

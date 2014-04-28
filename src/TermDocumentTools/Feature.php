@@ -96,11 +96,9 @@ class Feature implements \JsonSerializable {
      * @return float
      */
     public function getValue($entry) {
-        /** @noinspection PhpUnusedLocalVariableInspection */
-        $value = 0;
         if ($entry instanceof Term) {
             $value = $this->termValues[$entry->id()];
-        } if ($entry instanceof Document) {
+        } else if ($entry instanceof Document) {
             $value = $this->documentValues[$entry->id()];
         } else {
             throw new \InvalidArgumentException("entry needs to be of type Term or Document");
@@ -134,6 +132,22 @@ class Feature implements \JsonSerializable {
 
     }
 
+    /**
+     * @return \LinearAlgebra\Vector
+     */
+    public function getDocumentValues()
+    {
+        return $this->documentValues;
+    }
+
+    /**
+     * @return \LinearAlgebra\Vector
+     */
+    public function getTermValues()
+    {
+        return $this->termValues;
+    }
+
 
     public function toObject() {
         return (object) array(
@@ -144,5 +158,29 @@ class Feature implements \JsonSerializable {
             'documentValues' => $this->documentValues,
         );
 
+    }
+
+    public function toObjectWithJoinedLabels(Terms $terms, Documents $documents) {
+        $result = array();
+        foreach ($documents as $i => $item) {
+            /** @var $item Document  */
+            $result[] = (object)array(
+                'id' => 'd_'.$item->id(),
+                'type' => 'd',
+                'name' => $item->name(),
+                'value' => $this->weight * $this->documentValues[$i]
+            );
+        }
+        foreach ($terms as $i => $item) {
+            /** @var $item Term */
+            $result[] = (object)array(
+                'id' => 't_'.$item->id(),
+                'type' => 't',
+                'name' => $item->name(),
+                'value' => $this->weight * $this->termValues[$i]
+            );
+        }
+
+        return $result;
     }
 }

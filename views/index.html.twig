@@ -5,21 +5,21 @@
     <div id="wahlomat" class="clearfix">
 
         <article>
-            <h1>Wahlomat 2013 visualisiert</h1>
-            <a href="{{  path('wahlomat_view') }}"><img class="pull-right preview" src="{{base}}/img/parteien-thesen.png" /></a>
-            <h2><a href="{{  path('wahlomat_view') }}">1. Parteien und Thesenübersicht</a></h2>
+            <h1>Wahlomat visualisiert</h1>
+            <a href="{{  path('wahlomat_view', {dataSet:dataSet}) }}"><img class="pull-right preview" src="{{base}}/img/parteien-thesen.png" /></a>
+            <h2><a href="{{  path('wahlomat_view', {dataSet:dataSet}) }}">1. Parteien und Thesenübersicht</a></h2>
 
             <p>Der Wahlomat setzt eher auf ein spielerisches Herangehen an die Parteien, so muss man sich die Parteien, die man mit seiner eigenen Position vergleichen will, erst aussuchen, maximal kann man 8 Parteien miteinander vergleichen und die detaillierten Antworten der Parteien sind immer einige Klicks entfernt. </p>
             <p>Als spielerische politische Positionsfindung ist das eine gute Idee, zur Beantwortung der Frage, wie die Parteienlandschaft beschaffen ist, aber eher ungeeignet.</p>
             <p>Die erste Visualisierung ist eine Aufnahme aus der Totale, sämtliche Antworten sind einsehbar, per Klick auf den Schnittpunkt zwischen Partei und These kann man die Detailantwort lesen.</p>
-            <a href="{{  path('wahlomat_view') }}">Zur Visualisierung</a>
+            <a href="{{  path('wahlomat_view', {dataSet:dataSet}) }}">Zur Visualisierung</a>
 
             <hr class="clearfix"/>
         </article>
 
         <article>
-            <a href="{{  path('wahlomat_parties') }}"><img class="pull-right preview" src="{{base}}/img/parteien-aehnlichkeit.png" /></a>
-            <h2><a href="{{  path('wahlomat_parties') }}">2. Ählichkeiten der Parteien</a></h2>
+            <a href="{{  path('wahlomat_parties', {dataSet:dataSet}) }}"><img class="pull-right preview" src="{{base}}/img/parteien-aehnlichkeit.png" /></a>
+            <h2><a href="{{  path('wahlomat_parties',{dataSet:dataSet}) }}">2. Ählichkeiten der Parteien</a></h2>
             <p>
                 Diese Visualisierung zeigt "Ähnlichkeiten" zwischen den Antworten der Parteien an.
             </p>
@@ -28,15 +28,17 @@
                 Fragen bei denen sich auch nur eine Partei enthält, werden in dieser Norm nicht berücksichtigt.
             </p>
             <p>Ein Klick auf die Schnittpunkte zweier Parteien zeigt die Thesen, in denen beide Parteien übereinstimmen, und die Thesen in denen beide voneinander abweichen, aufgeschlüsselt auf.</p>
-            <a href="{{  path('wahlomat_parties') }}">Zur Visualisierung</a>
+            <a href="{{  path('wahlomat_parties',{dataSet:dataSet} ) }}">Zur Visualisierung</a>
 
             <hr class="clearfix"/>
         </article>
 
+        {#
         <article>
-            <a href="{{ '#' }}"><img class="pull-right preview" src="{{base}}/img/parteien-spektrum.png" /></a>
-            <h2><a href="{{ '#' }}">3. Das Parteienspektrum</a></h2>
+            <a href="{{ path('wahlomat_eigen',{dataSet:dataSet}) }}"><img class="pull-right preview" src="{{base}}/img/parteien-spektrum.png" /></a>
+            <h2><a href="{{ path('wahlomat_eigen',{dataSet:dataSet}) }}">3. Das Parteienspektrum</a></h2>
             <p>To be continued</p>
         </article>
+        #}
     </div>
 {% endblock %}

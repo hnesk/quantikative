@@ -61,16 +61,40 @@ class Controller {
     }
 
 
+    public function spectrum($dataSet, Request $request, Application $app) {
+        $dataSets = $this->loader->getDataSets();
+        $tdm = $this->getMatrix($dataSet);
+        $tdm = $tdm->filterDocuments(ArrayKeyFilter::create($request->get('party'))->toClosure());
+        $tdm = $tdm->filterTerms(ArrayKeyFilter::create($request->get('term'))->toClosure());
+        $features = $tdm->calculateFactorMatrix();
+
+
+        return $app->render(
+            'spectrum.html.twig',
+            array(
+                'tdm' => $tdm,
+                'features' => $features->jsonSerialize(),
+                'dataSets' => $dataSets,
+                'dataSet' => $dataSet,
+            )
+        );
+    }
+
 
     public function eigen($dataSet, Request $request, Application $app) {
         $dataSets = $this->loader->getDataSets();
         $tdm = $this->getMatrix($dataSet);
         $tdm = $tdm->filterDocuments(ArrayKeyFilter::create($request->get('party'))->toClosure());
         $tdm = $tdm->filterTerms(ArrayKeyFilter::create($request->get('term'))->toClosure());
+
+        $features = $tdm->calculateFactorMatrix();
+
+
         return $app->render(
             'eigen.html.twig',
             array(
                 'tdm' => $tdm,
+                'features' => $features,
                 'dataSets' => $dataSets,
                 'dataSet' => $dataSet,
             )
